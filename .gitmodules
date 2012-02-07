@@ -9,7 +9,7 @@
 	url = git://github.com/documentcloud/underscore.git
 [submodule "vendor/jquery"]
 	path = vendor/jquery
-	url = git://github.com/documentcloud/underscore.git
+	url = git://github.com/jquery/jquery.git
 [submodule "vendor/bootstrap"]
 	path = vendor/bootstrap
 	url = git://github.com/twitter/bootstrap.git
