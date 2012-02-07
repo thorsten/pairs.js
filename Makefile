@@ -2,7 +2,7 @@ submodules:
 	git submodule update --init --recursive
 
 install: submodules symlink_js
-	npm bundle
+	npm install
 
 symlink_js:
 	ln -f -s ../../../vendor/backbone.js/backbone-min.js src/public/js/
