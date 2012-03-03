@@ -2,13 +2,14 @@ submodules:
 	git submodule update --init --recursive
 
 install: submodules symlink_js
-	npm install
+	npm install less
+	npm install uglifyjs
 
 symlink_js:
-	ln -f -s ./vendor/backbone.js/backbone-min.js src/public/js/libs/
-	ln -f -s ./vendor/underscore.js/underscore-min.js src/public/js/libs/
-	ln -f -s ./vendor/Socket.IO/socket.io.js src/public/js/libs/
-	ln -f -s ./vendor/Socket.IO/lib/vendor/web-socket-js/WebSocketMain.swf src/public/js/libs/
+	ln -f -s vendor/backbone.js/backbone-min.js src/public/js/libs/
+	ln -f -s vendor/underscore.js/underscore-min.js src/public/js/libs/
+	ln -f -s vendor/Socket.IO/socket.io.js src/public/js/libs/
+	ln -f -s vendor/Socket.IO/lib/vendor/web-socket-js/WebSocketMain.swf src/public/js/libs/
 
 #
 # BUILD SIMPLE BOOTSTRAP DIRECTORY
