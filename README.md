@@ -1,6 +1,6 @@
-# customer.js
+# memory.js
 
-A demo project using HTML5 and node.js by Thorsten Rinne and Sebastian Springer
+A memory game using HTML5 and node.js by Thorsten Rinne and Sebastian Springer
 
 ## License
 
