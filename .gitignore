@@ -5,7 +5,3 @@
 node_modules/*
 
 # symlinked JavaScript libraries
-src/public/js/libs/WebSocketMain.swf
-src/public/js/libs/backbone-min.js
-src/public/js/libs/socket.io.js
-src/public/js/libs/underscore-min.js
