@@ -4,7 +4,7 @@ define(["application/models/card", "application/views/card", "application/models
 
         function controller(){};
 
-        controller.prototype.startAction = function() {
+        controller.prototype.startAction = function(socket) {
 
             var cards = [];
 
