@@ -1,9 +1,9 @@
 define(["application/models/card", "application/views/card", "application/models/cards", "application/views/cards",
-        "application/views/stats"],
-       function(models_card, views_card, models_cards, views_cards, views_stats) {
-    
+    "application/views/stats"],
+    function(models_card, views_card, models_cards, views_cards, views_stats) {
+
         function controller(){};
-    
+
         controller.prototype.startAction = function() {
 
             var cards = [];
@@ -19,15 +19,15 @@ define(["application/models/card", "application/views/card", "application/models
             }
 
             var collection = new models_cards(cards);
-            
+
             collection.shuffle();
-            
+
             var collectionView = new views_cards({model: collection});
             collectionView.render();
 
             var statsView = new views_stats();
             statsView.render();
         };
-        
+
         return controller;
-});
+    });

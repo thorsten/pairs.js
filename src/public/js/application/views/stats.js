@@ -11,7 +11,7 @@ define(function() { return Backbone.View.extend({
 
         $(this.el).html(template);
 
-        $('body').append(this.el);
+        $('#container').append(this.el);
 
         $('body').on('click', _.bind(this.clicks, this));
 
