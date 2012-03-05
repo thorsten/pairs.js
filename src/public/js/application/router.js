@@ -1,8 +1,11 @@
-define(["application/controllers/card", "application/controllers/login", "application/models/socket"], function(card, login, socket) {
+define(["application/controllers/card", "application/controllers/login",
+        "application/controllers/game", "application/models/socket"], function(card, login, game, socket) {
     return Backbone.Router.extend({
         routes: {
+            '': 'login',
             'login': 'login',
-            'start': 'start'
+            'start': 'start',
+            'game': 'game'
         },
 
         socket: null,
@@ -27,6 +30,13 @@ define(["application/controllers/card", "application/controllers/login", "applic
             }
 
             return this.socket;
+        },
+
+        game: function() {
+            var socket = this._openSocket();
+
+            var controller = new game();
+            controller.gameAction(socket);
         }
     });
 });

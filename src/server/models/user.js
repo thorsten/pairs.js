@@ -3,6 +3,8 @@ var _ = require('underscore');
 
 application.models.user = Backbone.Model.extend({
 
+    defaultToken: 'thisIsTheDefaultToken',
+
     defaults: {
         username: '',
         password: ''
@@ -41,9 +43,9 @@ application.models.user = Backbone.Model.extend({
     isUserLoggedIn: function(err, results, fields) {
         if (!(_.isEmpty(results))) {
             this.generateToken();
+        } else {
+            this.loginResponse(false, '');
         }
-
-        this.loginResponse(false, '');
     },
 
     loginResponse: function(success, token) {
@@ -56,7 +58,7 @@ application.models.user = Backbone.Model.extend({
     },
 
     generateToken: function() {
-        var token = '';
+        var token = this.defaultToken;
 
         var query = 'INSERT INTO users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 

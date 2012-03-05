@@ -15,7 +15,6 @@ io.sockets.on('connection', function (socket) {
     // turn tiles
 
     socket.on('login', function (data) {
-
         require('./models/user.js');
 
         var userData = {
@@ -24,8 +23,6 @@ io.sockets.on('connection', function (socket) {
         };
 
         var user = new application.models.user(userData);
-
-        console.log(user);
 
         user.setSocket(socket);
 
@@ -41,6 +38,12 @@ io.sockets.on('connection', function (socket) {
 
         //socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
     });
+
+    /*socket.on('login', function (data) {
+        socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
+    });*/
+
+
 });
 
 console.log('Socket Server started');
