@@ -5,8 +5,8 @@ define(["application/models/login", "application/views/login"],
 
         controller.prototype.loginAction = function(socket) {
 
-            var loginModel = new models_login();
-            var loginView = new views_login();
+            var loginModel = new models_login({socket: socket});
+            var loginView = new views_login({model: loginModel});
             loginView.render();
         };
 

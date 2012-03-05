@@ -1,6 +1,6 @@
 var io = require('socket.io').listen(1337);
 
-var application = {
+application = {
     models: {},
     views: {}
 };
@@ -16,7 +16,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('login', function (data) {
 
-        require('models/user');
+        require('./models/user.js');
 
         var userData = {
             username: data.username,
@@ -27,6 +27,10 @@ io.sockets.on('connection', function (socket) {
 
         console.log(user);
 
+        user.setSocket(socket);
+
+        user.checkLogin();
+
         // new model with username + password
 
         // check if user is valid
@@ -35,7 +39,7 @@ io.sockets.on('connection', function (socket) {
 
         // reply token to user
 
-        socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
+        //socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
     });
 });
 

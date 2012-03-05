@@ -3,12 +3,30 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     className: 'login',
     tagName: 'form',
 
+    events: {
+        'submit': 'login'
+    },
+
     initialize: function() {
     },
 
     render: function() {
         $(this.el).html(template);
         $('#container').html(this.el);
+    },
+
+    login: function(e) {
+        e.preventDefault();
+
+
+        var data = {
+            username: $('#username').val(),
+            password: $('#password').val()
+        };
+
+        this.model.set(data);
+
+        this.model.trigger('login');
     }
 });
 });

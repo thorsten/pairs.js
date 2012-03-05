@@ -1,3 +1,25 @@
+/*var mysql = require('mysql');
+
+var db = 'memory';
+var credentials = {
+    user: 'root',
+    password: ''
+}
+
+var client = mysql.createClient(credentials);*/
+
+
+var test = 'test';
+
+{
+
+}
+
+
+
+
+
+/*
 var mysql = require('mysql');
 var TEST_DATABASE = 'nodejs_mysql_test';
 var TEST_TABLE = 'test';
@@ -49,3 +71,4 @@ client.query(
     client.end();
   }
 );
+*/
