@@ -5,28 +5,33 @@
 @import "../../../vendor/bootstrap/less/bootstrap.less";
 
 body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    footer {
+        padding: 11px;
+        #gradient > .vertical(#52575c, #3a3f44);
+        color: @white;
+    }
 }
 
 .row {
-        clear: both;
+    clear: both;
 }
 
 .row .cell {
-        float: left;
+    float: left;
 }
 
 .cell {
-        overflow: hidden;
-        height: 100px;
-        width: 100px;
-        margin: 5px;
+    overflow: hidden;
+    height: 100px;
+    width: 100px;
+    margin: 5px;
 }
 
 #container .active {
-        border: 3px solid red;
-        margin: 2px;
+    border: 3px solid @red;
+    margin: 2px;
 }
 
 img.card {
