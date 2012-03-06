@@ -15,11 +15,14 @@ io.sockets.on('connection', function (socket) {
     // turn tiles
 
     socket.on('login', function (data) {
+
+        console.log(data);
+
         require('./models/user.js');
 
         var userData = {
-            username: data.username,
-            password: data.password
+            username: data.model.username,
+            password: data.model.password
         };
 
         var user = new application.models.user(userData);

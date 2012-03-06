@@ -18,15 +18,22 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     login: function(e) {
         e.preventDefault();
 
-
         var data = {
             username: $('#username').val(),
             password: $('#password').val()
         };
 
-        this.model.set(data);
+        //this.model.set(data);
+        this.model.save(data, {
+            'success': _.bind(this.onSuccess, this)
+        });
+    },
 
-        this.model.trigger('login');
+    onSuccess: function() {
+        console.log('huhu');
+        //console.log(data);
+        //this.model.get('socket')
+        window.location.hash = '#games';
     }
 });
 });

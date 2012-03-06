@@ -44,17 +44,18 @@ application.models.user = Backbone.Model.extend({
         if (!(_.isEmpty(results))) {
             this.generateToken();
         } else {
-            this.loginResponse(false, '');
+            this.loginResponse('error', '');
         }
     },
 
     loginResponse: function(success, token) {
         var data = {
             success: success,
-            token: token
+            token: token,
+            id: 0
         }
 
-        this.socket.emit('loginSuccess', data);
+        this.socket.emit('reply', data);
     },
 
     generateToken: function() {
@@ -62,6 +63,6 @@ application.models.user = Backbone.Model.extend({
 
         var query = 'INSERT INTO users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
-        this.db.query(query, _.bind(this.loginResponse, this, true, token));
+        this.db.query(query, _.bind(this.loginResponse, this, 'success', token));
     }
 });
