@@ -12,6 +12,8 @@ application.models.user = Backbone.Model.extend({
 
     db: null,
     socket: null,
+    sessionid: null,
+    cbid: null,
 
     initialize: function() {
         /*this.db = require('./db.js');
@@ -34,6 +36,14 @@ application.models.user = Backbone.Model.extend({
         this.socket = socket;
     },
 
+    setSessionid: function(sessionid) {
+        this.sessionid = sessionid;
+    },
+
+    setCbid: function(cbid) {
+        this.cbid = cbid;
+    },
+
     checkLogin: function() {
         var query = 'SELECT * FROM users WHERE username = "' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
@@ -49,10 +59,14 @@ application.models.user = Backbone.Model.extend({
     },
 
     loginResponse: function(success, token) {
+
+        console.log(this.sessionid);
+
         var data = {
             success: success,
             token: token,
-            id: 0
+            id: this.cbid,
+            sessionid: this.sessionid
         }
 
         this.socket.emit('reply', data);

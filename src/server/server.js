@@ -28,6 +28,8 @@ io.sockets.on('connection', function (socket) {
         var user = new application.models.user(userData);
 
         user.setSocket(socket);
+        user.setSessionid(data.sessionid);
+        user.setCbid(data.id);
 
         user.checkLogin();
 

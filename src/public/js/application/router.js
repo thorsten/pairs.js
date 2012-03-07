@@ -10,6 +10,10 @@ define(["application/controllers/card", "application/controllers/login",
 
         socket: null,
 
+        initialize: function() {
+            this._overrideSync();
+        },
+
         start: function() {
             var socket = this._openSocket();
 
@@ -18,8 +22,6 @@ define(["application/controllers/card", "application/controllers/login",
         },
 
         login: function() {
-            this._overrideSync();
-
             var socket = this._openSocket();
 
             var controller = new login();
@@ -30,7 +32,6 @@ define(["application/controllers/card", "application/controllers/login",
             if (null == this.socket) {
                 this.socket = new socket();
             }
-
             return this.socket;
         },
 
@@ -44,6 +45,8 @@ define(["application/controllers/card", "application/controllers/login",
         _overrideSync: function() {
             var socket = this._openSocket();
             register = null;
+
+            clientId = new Date().getTime();
 
             Backbone.sync = function(method, model, options) {
 
@@ -63,23 +66,32 @@ define(["application/controllers/card", "application/controllers/login",
 
                 if (null == register) {
                     register =  {
-                        lastid: id,
-                        callbacks: {0: cbs}
+                        lastid: null,
+                        callbacks: {}
                     };
+                    register.callbacks
                 } else {
                     id = register.lastid + 1;
-                    register.lastid = id;
-                    register.callbacks[id] = cbs;
                 }
+                register.lastid = id;
+                register.callbacks[id] = cbs;
 
-                var payload = {model: model, options: options, id: id};
+                var payload = {model: model, options: options, id: id, sessionid: clientId};
 
                 socket.emit(model.url, payload);
 
                 socket.on('reply', function(data) {
-                    var func = register.callbacks[data.id][data.success];
-                    func();
-                    //delete(register.callbacks[data.id]);
+                    if (data.sessionid == clientId) {
+
+                        console.log(register.callbacks);
+
+                        var cbs = register.callbacks;
+                        debugger;
+
+                        var func = register.callbacks[data.id][data.success];
+                        func();
+                        delete(register.callbacks[data.id]);
+                    }
                 });
             }
         }
