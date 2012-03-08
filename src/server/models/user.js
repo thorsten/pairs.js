@@ -59,14 +59,12 @@ application.models.user = Backbone.Model.extend({
     },
 
     loginResponse: function(success, token) {
-
-        console.log(this.sessionid);
-
         var data = {
             success: success,
             token: token,
             id: this.cbid,
-            sessionid: this.sessionid
+            sessionid: this.sessionid,
+            payload: ''
         }
 
         this.socket.emit('reply', data);

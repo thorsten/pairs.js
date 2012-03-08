@@ -30,10 +30,7 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     },
 
     onSuccess: function() {
-        console.log('huhu');
-        //console.log(data);
-        //this.model.get('socket')
-        window.location.hash = '#games';
+        window.location.hash = '#game';
     }
 });
 });

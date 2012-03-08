@@ -44,10 +44,37 @@ io.sockets.on('connection', function (socket) {
         //socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
     });
 
-    /*socket.on('login', function (data) {
-        socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
-    });*/
+    socket.on('game', function(request) {
+        /*
 
+         { method: 'read',
+         model: [ {} ],
+         options: { parse: true },
+         id: 1,
+         sessionid: 1331186140401 }
+
+         */
+
+        console.log(request);
+
+        var payload = [
+            {id: 1,
+            created: '08.03.2012 07:12',
+            finished: false,
+            players: 2}
+        ];
+
+
+        var data = {
+            success: 'success',
+            id: request.id,
+            sessionid: request.sessionid,
+            payload: payload
+        }
+
+        socket.emit('reply', data);
+
+    });
 
 });
 

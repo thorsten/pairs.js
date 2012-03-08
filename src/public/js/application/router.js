@@ -76,20 +76,27 @@ define(["application/controllers/card", "application/controllers/login",
                 register.lastid = id;
                 register.callbacks[id] = cbs;
 
-                var payload = {model: model, options: options, id: id, sessionid: clientId};
+                var payload = {
+                    method: method,
+                    model: model,
+                    options: options,
+                    id: id,
+                    sessionid: clientId
+                };
+
+                console.log(model.url);
+                console.log(payload);
 
                 socket.emit(model.url, payload);
 
                 socket.on('reply', function(data) {
-                    if (data.sessionid == clientId) {
-
-                        console.log(register.callbacks);
-
-                        var cbs = register.callbacks;
-                        debugger;
-
+                    if (data.sessionid == clientId
+                        && register.callbacks.hasOwnProperty(data.id)) {
                         var func = register.callbacks[data.id][data.success];
-                        func();
+
+                        console.log(func.toString());
+
+                        func(data.payload);
                         delete(register.callbacks[data.id]);
                     }
                 });
