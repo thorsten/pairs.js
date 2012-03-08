@@ -24,12 +24,8 @@ define(["text!application/views/login.html"], function(template) { return Backbo
         };
 
         this.model.save(data, {
-            'success': _.bind(this.onSuccess, this)
+            'success': _.bind(this.model.onSuccess, this.model)
         });
-    },
-
-    onSuccess: function() {
-        window.location.hash = '#game';
     }
 });
 });

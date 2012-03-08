@@ -12,10 +12,11 @@ define(["application/models/game", "application/models/games",
 
             this.initialize();
 
-            socket.on('createGame', _.bind(this.initialize, this));
+            socket.on('createGame', _.bind(this.refetch, this));
         };
 
         controller.prototype.refetch = function() {
+            console.log('REFETCH!!!!');
             this.initialize();
         };
 

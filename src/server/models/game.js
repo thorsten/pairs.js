@@ -81,13 +81,33 @@ application.models.game = Backbone.Model.extend({
 
         var data = {
             success: 'success',
-            id: this.bid,
+            id: this.cbid,
             sessionid: this.sessionid,
             payload: this.modelData
         };
 
         this.socket.emit('reply', data);
+        this.socket.broadcast.emit('createGame', this.modelData);
         this.socket.emit('createGame', this.modelData);
+    },
+
+    joinGame: function(data) {
+        var query = 'REPLACE INTO games_users (user_id, game_id) VALUES ((SELECT id FROM users WHERE token = "' + data.token + '"), "' + data.model.id + '")';
+        this.db.query(query, _.bind(this.sendJoinInfo, this));
+    },
+
+    sendJoinInfo: function(err, results, fields) {
+        var data = {
+            success: 'success',
+            id: this.cbid,
+            sessionid: this.sessionid,
+            payload: {'join': 'true'}
+        };
+
+        this.socket.emit('reply', data);
+        this.socket.broadcast.emit('createGame', {'join': 'true'});
+        this.socket.emit('createGame', {'join': 'true'});
     }
+
 
 });

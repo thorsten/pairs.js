@@ -13,9 +13,6 @@ define(["text!application/views/games.html"], function(template) { return Backbo
     },
 
     render: function() {
-        var lala = this.model;
-        //debugger;
-
         $(this.el).html(template);
         $('#container').html(this.el);
 

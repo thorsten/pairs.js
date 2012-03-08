@@ -23,7 +23,9 @@ INSERT INTO `games` (`id`, `created`, `finished`, `started`) VALUES
 (3, '07.03.2012 08:17', 0, 0),
 (4, '07.03.2012 08:18', 0, 0);
 
-CREATE TABLE `games_users` (`user_id` INT, `game_id` INT);
+CREATE TABLE `games_users` (`user_id` INT, `game_id` INT, PRIMARY KEY (`user_id`, `game_id`));
 
 INSERT INTO `games_users` (`user_id`, `game_id`) VALUES
 (1,1), (2,1), (1,2), (2,2), (1,3);
+
+CREATE TABLE `cards` (`game_id` INT, `card` VARCHAR(255), `order` INT, `active` TINYINT, `status` TINYINT);

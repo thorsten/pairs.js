@@ -1,6 +1,10 @@
 define(function() { return Backbone.Model.extend({
 
-    url: 'login'
+    url: 'login',
+
+    onSuccess: function(data) {
+        window.location.hash = '#game';
+    }
 
 });
 });

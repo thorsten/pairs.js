@@ -68,9 +68,9 @@ application.models.user = Backbone.Model.extend({
     },
 
     generateToken: function() {
-        var token = this.defaultToken;
+        var token = new Date().getTime();
 
-        var query = 'INSERT INTO users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
+        var query = 'UPDATE users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
         this.db.query(query, _.bind(this.loginResponse, this, 'success', token));
     }

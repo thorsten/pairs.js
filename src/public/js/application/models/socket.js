@@ -16,6 +16,7 @@ define(function() { return Backbone.Model.extend({
     },
 
     emit: function(ev, data) {
+        data['token'] = this.token;
         this.socket.emit(ev, data);
     },
 

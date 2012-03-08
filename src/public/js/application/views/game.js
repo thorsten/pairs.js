@@ -3,6 +3,10 @@ define(["text!application/views/game.html"], function(template) { return Backbon
     className: 'game',
     tagName: 'div',
 
+    events: {
+        'click #join': 'joinGame'
+    },
+
     initialize: function() {
         this.model.on('change', _.bind(this.render, this));
     },
@@ -20,6 +24,12 @@ define(["text!application/views/game.html"], function(template) { return Backbon
         }
 
         $('#list').append(this.el);
+
+        this.delegateEvents();
+    },
+
+    joinGame: function() {
+        this.model.save({'user': true}, {'success': function() {console.log('JOIN');}});
     }
 
 });

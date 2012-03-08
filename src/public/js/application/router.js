@@ -96,6 +96,11 @@ define(["application/controllers/card", "application/controllers/login",
                 socket.emit(url, payload);
 
                 socket.on('reply', function(data) {
+
+                    if (data.hasOwnProperty('token')) {
+                        socket.token = data.token;
+                    }
+
                     if (data.sessionid == clientId
                         && register.callbacks.hasOwnProperty(data.id)) {
                         var func = register.callbacks[data.id][data.success];
