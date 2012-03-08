@@ -32,8 +32,9 @@ define(["text!application/views/game.html"], function(template) { return Backbon
         this.model.save({'user': true}, {'success': _.bind(this.onJoinSuccess, this)});
     },
 
-    onJoinSuccess: function() {
+    onJoinSuccess: function(data) {
         window.location.hash = '#start';
+        window.location.search = '?id=' + data.id;
     }
 
 });

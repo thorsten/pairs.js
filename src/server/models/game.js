@@ -68,17 +68,54 @@ application.models.game = Backbone.Model.extend({
         this.db.query(query, _.bind(this.sendGameInfo, this));
     },
 
-    sendGameInfo: function(err, results, fields) {
-        var query = 'SELECT LAST_INSERT_ID() AS id';
-        this.db.query(query, _.bind(this.sendGameInfoToClient, this));
-    },
-
-    sendGameInfoToClient: function(err, results, fields) {
-
+    createGameData: function(err, results, fields) {
         var results = results.pop();
 
         this.modelData['id'] = results.id;
 
+        var models = this.getGameData();
+
+        var query = 'INSERT INTO cards (`game_id`, `card`, `order`) VALUES ' + models.join(',');
+
+        this.db.query(query, _.bind(this.sendGameInfoToClient, this));
+    },
+
+    getGameData: function() {
+        var id = this.modelData['id'];
+
+        var result = '';
+
+        var models = [];
+        for (var i = 1; i < 19; i++) {
+            models.push(i);
+            models.push(i);
+        }
+
+        models = this.shuffle(models);
+
+        for (var i = 0; i < models.length; i++) {
+            models[i] = '(' + id + ',' + models[i] + ',' + i + ')';
+        }
+        return models;
+    },
+
+    shuffle: function(models) {
+        var tmp, rand;
+        for (var i = 0; i < this.length; i++){
+            rand = Math.floor(Math.random() * this.length);
+            tmp = models[i];
+            models[i] = models[rand];
+            models[rand] = tmp;
+        }
+        return models;
+    },
+
+    sendGameInfo: function(err, results, fields) {
+        var query = 'SELECT LAST_INSERT_ID() AS id';
+        this.db.query(query, _.bind(this.createGameData, this));
+    },
+
+    sendGameInfoToClient: function(err, results, fields) {
         var data = {
             success: 'success',
             id: this.cbid,

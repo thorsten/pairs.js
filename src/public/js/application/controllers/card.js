@@ -9,8 +9,6 @@ define(["application/models/card", "application/views/card", "application/models
             socket.socket.removeAllListeners('reply');
             socket.socket.removeAllListeners('createGame');
 
-            $('#container').html('');
-
             var cards = [];
 
             for (var i = 1; i < 19; i++) {
