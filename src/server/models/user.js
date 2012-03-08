@@ -16,9 +16,6 @@ application.models.user = Backbone.Model.extend({
     cbid: null,
 
     initialize: function() {
-        /*this.db = require('./db.js');
-        //this.db = client;*/
-
         var mysql = require('mysql');
 
         var db = 'memory';

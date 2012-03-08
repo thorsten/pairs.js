@@ -15,9 +15,6 @@ io.sockets.on('connection', function (socket) {
     // turn tiles
 
     socket.on('login', function (data) {
-
-        console.log(data);
-
         require('./models/user.js');
 
         var userData = {
@@ -32,35 +29,25 @@ io.sockets.on('connection', function (socket) {
         user.setCbid(data.id);
 
         user.checkLogin();
-
-        // new model with username + password
-
-        // check if user is valid
-
-        // create token
-
-        // reply token to user
-
-        //socket.emit('loggedIn', {data: 'username: ' + data.username + ' password: ' + data.password});
     });
 
-    socket.on('game', function(request) {
-        /*
+    socket.on('game', function(data) {
 
-         { method: 'read',
-         model: [ {} ],
-         options: { parse: true },
-         id: 1,
-         sessionid: 1331186140401 }
+        require('./models/game.js');
 
-         */
+        var game = new application.models.game();
 
-        console.log(request);
+        game.setSocket(socket);
+        game.setSessionid(data.sessionid);
+        game.setCbid(data.id);
 
-        var payload = [
+        game.getGames();
+
+        /*var payload = [
             {id: 1,
             created: '08.03.2012 07:12',
             finished: false,
+            started: false,
             players: 2}
         ];
 
@@ -72,7 +59,7 @@ io.sockets.on('connection', function (socket) {
             payload: payload
         }
 
-        socket.emit('reply', data);
+        socket.emit('reply', data);*/
 
     });
 

@@ -1,12 +1,28 @@
-define(function() { return Backbone.View.extend({
+define(["text!application/views/game.html"], function(template) { return Backbone.View.extend({
 
-    className: 'card',
-    tagName: 'img',
+    className: 'game',
+    tagName: 'div',
 
-    events: {'click': 'turnCard'},
+    initialize: function() {
+        this.model.on('change', _.bind(this.render, this));
+    },
 
     render: function() {
+        var data = {
+            created: this.model.get('created'),
+            players: this.model.get('players')
+        };
 
+        $(this.el).html(_.template(template, data));
+
+        console.log(this.model.get('finished'));
+        console.log(this.model.get('started'));
+
+        if (this.model.get('finished') == 1 || this.model.get('started') == 1) {
+            this.$('#join').css('display', 'none');
+        }
+
+        $('#list').append(this.el);
     }
 
 });

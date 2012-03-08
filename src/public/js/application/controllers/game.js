@@ -8,6 +8,9 @@ define(["application/models/game", "application/models/games",
             console.log('gamelist here');
 
             var collection = new models_games({model: models_game});
+
+            collection.setModelView(views_game);
+
             var collectionView = new views_games({model: collection});
 
             collection.fetch();
