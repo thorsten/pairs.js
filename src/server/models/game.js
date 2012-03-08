@@ -144,6 +144,26 @@ application.models.game = Backbone.Model.extend({
         this.socket.emit('reply', data);
         this.socket.broadcast.emit('createGame', {'join': 'true'});
         this.socket.emit('createGame', {'join': 'true'});
+    },
+
+    getGame: function(data) {
+        console.log('_________');
+        console.log(data);
+        console.log('_________');
+
+        var query = 'SELECT `card` FROM `cards` WHERE `game_id` = ' + data.model.id + ' ORDER BY `order`';
+        this.db.query(query, _.bind(this.sendCards, this));
+    },
+
+    sendCards: function(err, result, fields) {
+        var data = {
+            success: 'success',
+            id: this.cbid,
+            sessionid: this.sessionid,
+            payload: result
+        };
+
+        this.socket.emit('reply', data);
     }
 
 

@@ -51,7 +51,7 @@ define(["application/controllers/card", "application/controllers/login",
             Backbone.sync = function(method, model, options) {
 
                 // method: create, read, update, delete
-                var allowedMethods = ['create', 'read', 'update', 'delete'];
+                var allowedMethods = ['create', 'read', 'update', 'delete', 'join'];
 
                 if (_.indexOf(allowedMethods, method) == -1) {
                     return false;

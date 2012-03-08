@@ -9,22 +9,29 @@ define(["application/models/card", "application/views/card", "application/models
             socket.socket.removeAllListeners('reply');
             socket.socket.removeAllListeners('createGame');
 
+            var model = {
+                id: window.location.search.substr(4)
+            };
+
+            model.url = 'game';
+
+            var options = {'success': _.bind(this.buildGame, this)}
+
+            Backbone.sync('join', model, options);
+        };
+
+        controller.prototype.buildGame = function(data) {
             var cards = [];
 
-            for (var i = 1; i < 19; i++) {
-                var data = {'background': '/img/c' + i + '.jpg'};
-                var m1 = new models_card(data);
+            for (var i = 0; i < data.length; i++) {
+                var bg = {'background': '/img/c' + data[i].card + '.jpg'};
+                var m1 = new models_card(bg);
                 new views_card({model: m1});
 
                 cards.push(m1);
-                var m2 = new models_card(data);
-                new views_card({model: m2});
-                cards.push(m2);
             }
 
             var collection = new models_cards(cards);
-
-            collection.shuffle();
 
             var collectionView = new views_cards({model: collection});
             collectionView.render();

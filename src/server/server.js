@@ -44,6 +44,9 @@ io.sockets.on('connection', function (socket) {
             case 'update':
                 game.joinGame(data);
                 break;
+            case 'join':
+                game.getGame(data);
+                break;
         }
     });
 
