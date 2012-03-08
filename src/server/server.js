@@ -41,26 +41,13 @@ io.sockets.on('connection', function (socket) {
         game.setSessionid(data.sessionid);
         game.setCbid(data.id);
 
-        game.getGames();
-
-        /*var payload = [
-            {id: 1,
-            created: '08.03.2012 07:12',
-            finished: false,
-            started: false,
-            players: 2}
-        ];
-
-
-        var data = {
-            success: 'success',
-            id: request.id,
-            sessionid: request.sessionid,
-            payload: payload
+        switch (data.method) {
+            case 'read':
+                game.getGames();
+                break;
+            case 'create':
+                break;
         }
-
-        socket.emit('reply', data);*/
-
     });
 
 });

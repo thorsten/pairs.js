@@ -13,15 +13,15 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 
 CREATE TABLE `games` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
-  `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  `created` VARCHAR(255),
   `finished` TINYINT DEFAULT 0,
   `started` TINYINT DEFAULT 0);
 
 INSERT INTO `games` (`id`, `created`, `finished`, `started`) VALUES
-(1, '2012-07-03 08:15', 1, 1),
-(2, '2012-07-03 08:16', 0, 1),
-(3, '2012-07-03 08:17', 0, 0),
-(4, '2012-07-03 08:18', 0, 0);
+(1, '07.03.2012 08:15', 1, 1),
+(2, '07.03.2012 08:16', 0, 1),
+(3, '07.03.2012 08:17', 0, 0),
+(4, '07.03.2012 08:18', 0, 0);
 
 CREATE TABLE `games_users` (`user_id` INT, `game_id` INT);
 

@@ -84,18 +84,22 @@ define(["application/controllers/card", "application/controllers/login",
                     sessionid: clientId
                 };
 
-                console.log(model.url);
+                var url = model.url;
+                if( _.isFunction(model.url)) {
+                    url = model.url();
+                }
+
+
+                console.log(url);
+                console.log(method);
                 console.log(payload);
 
-                socket.emit(model.url, payload);
+                socket.emit(url, payload);
 
                 socket.on('reply', function(data) {
                     if (data.sessionid == clientId
                         && register.callbacks.hasOwnProperty(data.id)) {
                         var func = register.callbacks[data.id][data.success];
-
-                        console.log(func.toString());
-
                         func(data.payload);
                         delete(register.callbacks[data.id]);
                     }

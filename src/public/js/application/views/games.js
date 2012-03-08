@@ -3,14 +3,27 @@ define(["text!application/views/games.html"], function(template) { return Backbo
     tagName: 'div',
     className: 'gameList',
 
+    events: {
+        'click .add': 'addGame'
+    },
+
     initialize: function() {
         this.model.on('reset', _.bind(this.render, this));
+        this.model.on('sync', _.bind(this.render, this));
     },
 
     render: function() {
-        $('#container').html(template);
+        $(this.el).html(template);
+        $('#container').html(this.el);
 
+        console.log(this.model);
         this.model.each(function(model) {model.trigger('change');});
+
+        this.delegateEvents();
+    },
+
+    addGame: function() {
+        this.model.addGame();
     }
 
 });
