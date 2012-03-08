@@ -8,6 +8,8 @@ application.models.game = Backbone.Model.extend({
     sessionid: null,
     cbid: null,
 
+    modelData: null,
+
     initialize: function() {
         var mysql = require('mysql');
 
@@ -57,5 +59,35 @@ application.models.game = Backbone.Model.extend({
 
         this.socket.emit('reply', data);
     },
+
+    createGame: function(data) {
+        this.modelData = data.model;
+
+        var query = 'INSERT INTO games (created, started, finished) VALUES ("' +
+                    data.model.created + '", "' + data.model.started + '", "' + data.model.finished + '")';
+        this.db.query(query, _.bind(this.sendGameInfo, this));
+    },
+
+    sendGameInfo: function(err, results, fields) {
+        var query = 'SELECT LAST_INSERT_ID() AS id';
+        this.db.query(query, _.bind(this.sendGameInfoToClient, this));
+    },
+
+    sendGameInfoToClient: function(err, results, fields) {
+
+        var results = results.pop();
+
+        this.modelData['id'] = results.id;
+
+        var data = {
+            success: 'success',
+            id: this.bid,
+            sessionid: this.sessionid,
+            payload: this.modelData
+        };
+
+        this.socket.emit('reply', data);
+        this.socket.emit('createGame', this.modelData);
+    }
 
 });

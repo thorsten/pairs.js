@@ -9,14 +9,16 @@ define(["text!application/views/games.html"], function(template) { return Backbo
 
     initialize: function() {
         this.model.on('reset', _.bind(this.render, this));
-        this.model.on('sync', _.bind(this.render, this));
+        this.model.on('add', _.bind(this.render, this));
     },
 
     render: function() {
+        var lala = this.model;
+        //debugger;
+
         $(this.el).html(template);
         $('#container').html(this.el);
 
-        console.log(this.model);
         this.model.each(function(model) {model.trigger('change');});
 
         this.delegateEvents();

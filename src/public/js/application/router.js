@@ -89,7 +89,6 @@ define(["application/controllers/card", "application/controllers/login",
                     url = model.url();
                 }
 
-
                 console.log(url);
                 console.log(method);
                 console.log(payload);

@@ -26,14 +26,12 @@ define(function() { return Backbone.Collection.extend({
 
         var data = {
             created: date.getDate() + '.' + (date.getMonth() + 1) + '.' +  date.getFullYear() + ' '
-                     + date.getMinutes() + ':' + date.getHours(),
+                     + date.getHours() + ':' + date.getMinutes(),
             started: 0,
             finished: 0
         };
 
         this.create(data);
     }
-
-
 });
 });

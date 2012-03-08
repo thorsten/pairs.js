@@ -7,13 +7,6 @@ application = {
 
 io.sockets.on('connection', function (socket) {
 
-    // login
-    // gamelist
-    // create game
-    // join game
-    // get game
-    // turn tiles
-
     socket.on('login', function (data) {
         require('./models/user.js');
 
@@ -46,6 +39,7 @@ io.sockets.on('connection', function (socket) {
                 game.getGames();
                 break;
             case 'create':
+                game.createGame(data);
                 break;
         }
     });

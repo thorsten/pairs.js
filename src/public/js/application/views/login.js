@@ -23,7 +23,6 @@ define(["text!application/views/login.html"], function(template) { return Backbo
             password: $('#password').val()
         };
 
-        //this.model.set(data);
         this.model.save(data, {
             'success': _.bind(this.onSuccess, this)
         });

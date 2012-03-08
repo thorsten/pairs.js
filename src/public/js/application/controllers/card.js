@@ -13,8 +13,6 @@ define(["application/models/card", "application/views/card", "application/models
                 var m1 = new models_card(data);
                 new views_card({model: m1});
 
-                console.log(m1.constructor.toString());
-
                 cards.push(m1);
                 var m2 = new models_card(data);
                 new views_card({model: m2});
