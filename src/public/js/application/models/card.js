@@ -1,5 +1,7 @@
 define(function() { return Backbone.Model.extend({
 
+        url: 'game',
+
         defaults: {
             'background': '',
             'status': 0,
@@ -16,7 +18,7 @@ define(function() { return Backbone.Model.extend({
             }
 
             if (this.get('status') == 0 && this.get('active') == 1) {
-                this.set({'status': 1});
+                this.save({'status': 1});
             }
         }
 

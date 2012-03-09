@@ -149,7 +149,7 @@ application.models.game = Backbone.Model.extend({
     },
 
     getGame: function(data) {
-        var query = 'SELECT `card` FROM `cards` WHERE `game_id` = ' + data.model.id + ' ORDER BY `order`';
+        var query = 'SELECT `card`, `order`, `game_id` FROM `cards` WHERE `game_id` = ' + data.model.id + ' ORDER BY `order`';
         this.db.query(query, _.bind(this.sendCards, this));
     },
 
@@ -188,8 +188,6 @@ application.models.game = Backbone.Model.extend({
 
     getFirstPlayer: function() {
         var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = 1';
-        console.log('FIRST');
-        console.log(query);
         this.db.query(query, _.bind(this.notifyUsers, this));
     },
 

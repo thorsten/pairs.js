@@ -69,7 +69,6 @@ define(function() { return Backbone.Collection.extend({
                 url: 'game'
             };
 
-            //var options = {'success': _.bind(this.buildGame, this)}
             var options = {};
 
             Backbone.sync('start', model, options);
@@ -86,9 +85,6 @@ define(function() { return Backbone.Collection.extend({
                     item.set({'active': 1});
                 });
 
-                console.log(this.socket);
-                console.log(data);
-
                 if (this.socket.token == data.user) {
                     this.usersTurn = true;
                     // nutzer ist dran
@@ -102,7 +98,5 @@ define(function() { return Backbone.Collection.extend({
         isUsersTurn: function() {
             return this.usersTurn;
         }
-
-
     });
 });

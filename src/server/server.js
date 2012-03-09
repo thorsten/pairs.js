@@ -34,6 +34,10 @@ io.sockets.on('connection', function (socket) {
         game.setSessionid(data.sessionid);
         game.setCbid(data.id);
 
+        console.log('__________________');
+        console.log(data);
+        console.log('__________________');
+
         switch (data.method) {
             case 'read':
                 game.getGames();
@@ -49,6 +53,22 @@ io.sockets.on('connection', function (socket) {
                 break;
             case 'start':
                 game.startGame(data);
+                break;
+        }
+    });
+
+    socket.on('card', function(data) {
+        require('./models/card.js');
+
+        var card = new application.models.card();
+
+        card.setSocket(socket);
+        card.setSessionid(data.sessionid);
+        card.setCbid(data.id);
+
+        switch (data.method) {
+            case 'update':
+                card.turnCard(data);
                 break;
         }
     });

@@ -30,10 +30,15 @@ define(["application/models/card", "application/views/card", "application/models
         };
 
         controller.prototype.buildGame = function(data) {
+
             var cards = [];
 
             for (var i = 0; i < data.length; i++) {
-                var bg = {'background': '/img/c' + data[i].card + '.jpg'};
+                var bg = {
+                    'id': data[i]['order'],
+                    'background': '/img/c' + data[i].card + '.jpg',
+                    'game_id': data[i]['game_id']
+                };
                 var m1 = new models_card(bg);
                 new views_card({model: m1});
 
