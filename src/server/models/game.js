@@ -101,8 +101,8 @@ application.models.game = Backbone.Model.extend({
 
     shuffle: function(models) {
         var tmp, rand;
-        for (var i = 0; i < this.length; i++){
-            rand = Math.floor(Math.random() * this.length);
+        for (var i = 0; i < models.length; i++){
+            rand = Math.floor(Math.random() * models.length);
             tmp = models[i];
             models[i] = models[rand];
             models[rand] = tmp;
@@ -147,10 +147,6 @@ application.models.game = Backbone.Model.extend({
     },
 
     getGame: function(data) {
-        console.log('_________');
-        console.log(data);
-        console.log('_________');
-
         var query = 'SELECT `card` FROM `cards` WHERE `game_id` = ' + data.model.id + ' ORDER BY `order`';
         this.db.query(query, _.bind(this.sendCards, this));
     },
