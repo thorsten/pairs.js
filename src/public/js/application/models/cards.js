@@ -101,8 +101,8 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurnCard: function(data) {
-            console.log('MUMU');
-            console.log(data);
+            console.log(this.at(data));
+            this.at(data).set({'status': 1});
         }
     });
 });
