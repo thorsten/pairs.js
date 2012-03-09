@@ -33,8 +33,7 @@ define(["text!application/views/game.html"], function(template) { return Backbon
     },
 
     onJoinSuccess: function(data) {
-        window.location.hash = '#start';
-        window.location.search = '?id=' + data.id;
+        window.location.hash = '#start/' + data.id;
     }
 
 });

@@ -16,7 +16,6 @@ define(["application/models/game", "application/models/games",
         };
 
         controller.prototype.refetch = function() {
-            console.log('REFETCH!!!!');
             this.initialize();
         };
 

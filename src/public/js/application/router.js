@@ -4,7 +4,7 @@ define(["application/controllers/card", "application/controllers/login",
         routes: {
             '': 'login',
             'login': 'login',
-            'start': 'start',
+            'start/:id': 'start',
             'game': 'game'
         },
 
@@ -14,11 +14,11 @@ define(["application/controllers/card", "application/controllers/login",
             this._overrideSync();
         },
 
-        start: function() {
+        start: function(id) {
             var socket = this._openSocket();
 
             var controller = new card();
-            controller.startAction(socket);
+            controller.startAction(socket, id);
         },
 
         login: function() {
