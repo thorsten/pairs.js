@@ -129,7 +129,7 @@ application.models.game = Backbone.Model.extend({
     },
 
     joinGame: function(data) {
-        var query = 'REPLACE INTO games_users (user_id, game_id) VALUES ((SELECT id FROM users WHERE token = "' + data.token + '"), "' + data.model.id + '")';
+        var query = 'REPLACE INTO games_users (user_id, game_id, `order`) VALUES ((SELECT id FROM users WHERE token = "' + data.token + '"), "' + data.model.id + '", (SELECT IF(MAX(`order`) IS NULL,1, MAX(`order`) + 1) FROM games_users AS t2 WHERE t2.game_id = "' + data.model.id + '"))';
         this.db.query(query, _.bind(this.sendJoinInfo, this));
     },
 

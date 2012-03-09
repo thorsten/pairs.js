@@ -12,9 +12,11 @@ define(function() { return Backbone.View.extend({
 
             this.buildRaster();
 
-            this.model.each(function(item) {
+            $('#container').append('<div><input type="button" id="start" value="START" /></div>');
+
+            /*this.model.each(function(item) {
                 item.set({'active': 1});
-            });
+            });*/
         },
 
         buildRaster: function() {
