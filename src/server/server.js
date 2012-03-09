@@ -47,6 +47,9 @@ io.sockets.on('connection', function (socket) {
             case 'join':
                 game.getGame(data);
                 break;
+            case 'start':
+                game.startGame(data);
+                break;
         }
     });
 

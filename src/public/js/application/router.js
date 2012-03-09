@@ -51,7 +51,7 @@ define(["application/controllers/card", "application/controllers/login",
             Backbone.sync = function(method, model, options) {
 
                 // method: create, read, update, delete
-                var allowedMethods = ['create', 'read', 'update', 'delete', 'join'];
+                var allowedMethods = ['create', 'read', 'update', 'delete', 'join', 'start'];
 
                 if (_.indexOf(allowedMethods, method) == -1) {
                     return false;
@@ -103,8 +103,10 @@ define(["application/controllers/card", "application/controllers/login",
 
                     if (data.sessionid == clientId
                         && register.callbacks.hasOwnProperty(data.id)) {
-                        var func = register.callbacks[data.id][data.success];
-                        func(data.payload);
+                        if (register.callbacks[data.id].hasOwnProperty(data.success)) {
+                            var func = register.callbacks[data.id][data.success];
+                            func(data.payload);
+                        }
                         delete(register.callbacks[data.id]);
                     }
                 });

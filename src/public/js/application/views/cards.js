@@ -13,10 +13,7 @@ define(function() { return Backbone.View.extend({
             this.buildRaster();
 
             $('#container').append('<div><input type="button" id="start" value="START" /></div>');
-
-            /*this.model.each(function(item) {
-                item.set({'active': 1});
-            });*/
+            $('#start').on('click', _.bind(this.model.startGame, this.model));
         },
 
         buildRaster: function() {

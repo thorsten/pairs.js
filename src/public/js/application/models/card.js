@@ -11,6 +11,10 @@ define(function() { return Backbone.Model.extend({
         },
 
         toggleStatus: function() {
+            if (!this.collection.isUsersTurn()) {
+                return;
+            }
+
             if (this.get('status') == 0 && this.get('active') == 1) {
                 this.set({'status': 1});
             }

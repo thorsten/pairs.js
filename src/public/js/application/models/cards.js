@@ -3,6 +3,10 @@ define(function() { return Backbone.Collection.extend({
         activeFirst: null,
         activeSecond: null,
         timeout: null,
+        game: null,
+        socket: null,
+        started: false,
+        usersTurn: false,
 
         initialize: function() {
             this.on('change', _.bind(this.handleStatusChange, this));
@@ -48,7 +52,57 @@ define(function() { return Backbone.Collection.extend({
                 this.activeFirst = null;
                 this.activeSecond = null;
             }
+        },
+
+        setGameId: function(gameId) {
+            this.game = gameId;
+        },
+
+        setSocket: function(socket) {
+            this.socket = socket;
+        },
+
+        startGame: function() {
+            console.log('START GAME');
+            var model = {
+                id: this.game,
+                url: 'game'
+            };
+
+            //var options = {'success': _.bind(this.buildGame, this)}
+            var options = {};
+
+            Backbone.sync('start', model, options);
+        },
+
+        handleSocket: function() {
+            this.socket.on('turn', _.bind(this.handleTurn, this));
+        },
+
+        handleTurn: function(data) {
+            if (this.started == false) {
+                this.started = true;
+                this.each(function(item) {
+                    item.set({'active': 1});
+                });
+
+                console.log(this.socket);
+                console.log(data);
+
+                if (this.socket.token == data.user) {
+                    this.usersTurn = true;
+                    // nutzer ist dran
+                } else {
+                    this.usersTurn = false;
+                    // nutzer ist nicht dran
+                }
+            }
+        },
+
+        isUsersTurn: function() {
+            return this.usersTurn;
         }
+
 
     });
 });

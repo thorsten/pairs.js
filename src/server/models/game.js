@@ -10,6 +10,8 @@ application.models.game = Backbone.Model.extend({
 
     modelData: null,
 
+    gameId: null,
+
     initialize: function() {
         var mysql = require('mysql');
 
@@ -160,6 +162,55 @@ application.models.game = Backbone.Model.extend({
         };
 
         this.socket.emit('reply', data);
+    },
+
+    startGame: function(data) {
+        this.gameId = data.model.id;
+
+        var query = 'UPDATE `games` SET `started` = 1 WHERE `id` = "' + data.model.id + '"';
+        this.db.query(query, _.bind(this.getActiveUser, this));
+    },
+
+    getActiveUser: function() {
+        var query = 'SELECT `order` FROM games_users WHERE game_id = "' + this.gameId + '" AND active = 1';
+        this.db.query(query, _.bind(this.findNextUser, this));
+    },
+
+    findNextUser: function(err, result, fields) {
+        if (_.isEmpty(result)) {
+            this.getFirstPlayer();
+        } else {
+            result = result.pop();
+            var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = "' + (result.order + 1) + '"';
+            this.db.query(query, _.bind(this.notifyUsers, this));
+        }
+    },
+
+    getFirstPlayer: function() {
+        var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = 1';
+        console.log('FIRST');
+        console.log(query);
+        this.db.query(query, _.bind(this.notifyUsers, this));
+    },
+
+    notifyUsers: function(err, result, fields) {
+        var result = result.pop();
+
+        var modelData = {
+            user: result.token,
+            game: this.gameId
+        }
+
+        var data = {
+            success: 'success',
+            id: this.cbid,
+            sessionid: this.sessionid,
+            payload: {'turn': 'result'}
+        };
+
+        this.socket.emit('reply', data);
+        this.socket.broadcast.emit('turn', modelData);
+        this.socket.emit('turn', modelData);
     }
 
 

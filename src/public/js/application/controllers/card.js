@@ -2,18 +2,27 @@ define(["application/models/card", "application/views/card", "application/models
     "application/views/stats"],
     function(models_card, views_card, models_cards, views_cards, views_stats) {
 
-        function controller(){};
+        function controller(){
+            game: null;
+            socket: null;
+        };
 
+        /*
+        @todo use instance of models_game here instead of fake model
+         */
         controller.prototype.startAction = function(socket, id) {
 
             socket.socket.removeAllListeners('reply');
             socket.socket.removeAllListeners('createGame');
 
-            var model = {
-                id: id
-            };
+            this.socket = socket;
 
-            model.url = 'game';
+            this.game = id;
+
+            var model = {
+                id: id,
+                url: 'game'
+            };
 
             var options = {'success': _.bind(this.buildGame, this)}
 
@@ -34,6 +43,11 @@ define(["application/models/card", "application/views/card", "application/models
             var collection = new models_cards(cards);
 
             var collectionView = new views_cards({model: collection});
+
+            collection.setGameId(this.game);
+            collection.setSocket(this.socket);
+            collection.handleSocket();
+
             collectionView.render();
 
             var statsView = new views_stats();
