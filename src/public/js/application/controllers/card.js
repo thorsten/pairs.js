@@ -6,8 +6,6 @@ define(["application/models/card", "application/views/card", "application/models
 
         controller.prototype.startAction = function(socket, id) {
 
-            console.log('START: ' + id);
-
             socket.socket.removeAllListeners('reply');
             socket.socket.removeAllListeners('createGame');
 
@@ -23,9 +21,6 @@ define(["application/models/card", "application/views/card", "application/models
         };
 
         controller.prototype.buildGame = function(data) {
-            console.log('BUILD GAME');
-
-
             var cards = [];
 
             for (var i = 0; i < data.length; i++) {

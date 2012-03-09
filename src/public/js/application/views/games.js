@@ -13,8 +13,6 @@ define(["text!application/views/games.html"], function(template) { return Backbo
     },
 
     render: function() {
-        $('#container').html('');
-
         $(this.el).html(template);
         $('#container').html(this.el);
 
