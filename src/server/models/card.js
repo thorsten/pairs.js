@@ -35,7 +35,9 @@ application.models.card = Backbone.Model.extend({
     },
 
     turnCard: function(data) {
-
+        this.socket.emit('reply', data);
+        this.socket.broadcast.emit('turnCard', data.model.id);
+        this.socket.emit('turnCard', data.model.id);
     }
 
 });

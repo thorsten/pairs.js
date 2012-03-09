@@ -76,6 +76,7 @@ define(function() { return Backbone.Collection.extend({
 
         handleSocket: function() {
             this.socket.on('turn', _.bind(this.handleTurn, this));
+            this.socket.on('turnCard', _.bind(this.handleTurnCard, this));
         },
 
         handleTurn: function(data) {
@@ -97,6 +98,11 @@ define(function() { return Backbone.Collection.extend({
 
         isUsersTurn: function() {
             return this.usersTurn;
+        },
+
+        handleTurnCard: function(data) {
+            console.log('MUMU');
+            console.log(data);
         }
     });
 });

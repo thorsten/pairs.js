@@ -1,6 +1,6 @@
 define(function() { return Backbone.Model.extend({
 
-        url: 'game',
+        url: 'card',
 
         defaults: {
             'background': '',
