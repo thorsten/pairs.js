@@ -8,19 +8,6 @@ define(function() { return Backbone.Collection.extend({
             this.on('change', _.bind(this.handleStatusChange, this));
         },
 
-        /*
-        @TODO remove
-         */
-        shuffle: function() {
-            var tmp, rand;
-            for (var i = 0; i < this.length; i++){
-                rand = Math.floor(Math.random() * this.length);
-                tmp = this.models[i];
-                this.models[i] = this.models[rand];
-                this.models[rand] = tmp;
-            }
-        },
-
         handleStatusChange: function(card) {
             if (card.get('active') == 1 && card.get('status') == 1) {
                 if (this.timeout != null) {
