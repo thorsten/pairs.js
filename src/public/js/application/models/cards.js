@@ -63,7 +63,6 @@ define(function() { return Backbone.Collection.extend({
         },
 
         startGame: function() {
-            console.log('START GAME');
             var model = {
                 id: this.game,
                 url: 'game'

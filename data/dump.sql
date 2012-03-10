@@ -28,10 +28,9 @@ CREATE TABLE `games_users` (
   `game_id` INT,
   `order` INT,
   `active` TINYINT,
-  `turned_by_user` INT,
   PRIMARY KEY (`user_id`, `game_id`));
 
 INSERT INTO `games_users` (`user_id`, `game_id`, `order`) VALUES
 (1,1,1), (2,1,2), (1,2,1), (2,2,2), (1,3,1);
 
-CREATE TABLE `cards` (`game_id` INT, `card` VARCHAR(255), `order` INT, `active` TINYINT DEFAULT 1, `status` TINYINT DEFAULT 0);
+CREATE TABLE `cards` (`game_id` INT, `card` VARCHAR(255), `order` INT, `active` TINYINT DEFAULT 1, `status` TINYINT DEFAULT 0, `turned_by_user` INT);

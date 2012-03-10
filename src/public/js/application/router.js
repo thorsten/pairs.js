@@ -105,7 +105,9 @@ define(["application/controllers/card", "application/controllers/login",
                         && register.callbacks.hasOwnProperty(data.id)) {
                         if (register.callbacks[data.id].hasOwnProperty(data.success)) {
                             var func = register.callbacks[data.id][data.success];
-                            func(data.payload);
+                            if (_.isFunction(func)) {
+                                func(data.payload);
+                            }
                         }
                         delete(register.callbacks[data.id]);
                     }

@@ -33,10 +33,6 @@ io.sockets.on('connection', function (socket) {
         game.setSessionid(data.sessionid);
         game.setCbid(data.id);
 
-        console.log('__________________');
-        console.log(data);
-        console.log('__________________');
-
         switch (data.method) {
             case 'read':
                 game.getGames();
