@@ -8,52 +8,6 @@ define(function() { return Backbone.Collection.extend({
         started: false,
         usersTurn: false,
 
-        initialize: function() {
-            //this.on('change', _.bind(this.handleStatusChange, this));
-        },
-/*
-        handleStatusChange: function(card) {
-            if (card.get('active') == 1 && card.get('status') == 1) {
-                if (this.timeout != null) {
-                    clearTimeout(this.timeout);
-                    this.timeout = null;
-                    this.disableCards();
-                }
-
-                if (this.activeFirst == null) {
-                    this.activeFirst = card;
-                    return;
-                }
-
-                if (card.cid == this.activeFirst.cid) {
-                    return;
-                }
-
-                this.activeSecond = card;
-
-                if (this.activeFirst.get('background') == this.activeSecond.get('background')) {
-                    var data = {'active': 0};
-                    this.activeFirst.set(data);
-                    this.activeSecond.set(data);
-                    this.activeFirst = null;
-                    this.activeSecond = null;
-                } else {
-                    this.timeout = setTimeout(_.bind(this.disableCards, this), 2000);
-                }
-            }
-        },
-
-        disableCards: function() {
-            if (null != this.activeFirst && null != this.activeSecond) {
-                var data = {'status': 0};
-                this.activeFirst.set(data);
-                this.activeSecond.set(data);
-
-                this.activeFirst = null;
-                this.activeSecond = null;
-            }
-        },*/
-
         setGameId: function(gameId) {
             this.game = gameId;
         },
@@ -100,6 +54,10 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurnCard: function(data) {
+            if (data.length == 2 && data[0].status == 0 && data[0].active == 1) {
+                this.cleanUp();
+            }
+
             data.forEach(_.bind(this.changeCardProperties, this));
         },
 
@@ -110,6 +68,22 @@ define(function() { return Backbone.Collection.extend({
             };
 
             this.at(values.cardId).set(card);
+        },
+
+        cleanUp: function() {
+            this.models.forEach(function(item) {item.set({status: 0})});
+        },
+
+        moreThanTwoActive: function() {
+            var activeCount = 0;
+
+            for (var i = 0; i < this.models.length; i++) {
+                if (this.models[i].get('status') == 1 && this.models[i].get('active') == 1) {
+                    activeCount++;
+                }
+            }
+
+            return (activeCount > 2) ? true : false;
         }
     });
 });

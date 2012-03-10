@@ -13,7 +13,7 @@ define(function() { return Backbone.Model.extend({
         },
 
         toggleStatus: function() {
-            if (!this.collection.isUsersTurn()) {
+            if (!this.collection.isUsersTurn() || this.collection.moreThanTwoActive()) {
                 return;
             }
 
