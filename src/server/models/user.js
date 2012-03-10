@@ -10,24 +10,9 @@ application.models.user = Backbone.Model.extend({
         password: ''
     },
 
-    db: null,
     socket: null,
     sessionid: null,
     cbid: null,
-
-    initialize: function() {
-        var mysql = require('mysql');
-
-        var db = 'memory';
-        var credentials = {
-            user: 'root',
-            password: ''
-        }
-
-        this.db = mysql.createClient(credentials);
-
-        this.db.query('USE memory');
-    },
 
     setSocket: function(socket) {
         this.socket = socket;
@@ -44,7 +29,7 @@ application.models.user = Backbone.Model.extend({
     checkLogin: function() {
         var query = 'SELECT * FROM users WHERE username = "' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
-        this.db.query(query, _.bind(this.isUserLoggedIn, this));
+        application.db.query(query, _.bind(this.isUserLoggedIn, this));
     },
 
     isUserLoggedIn: function(err, results, fields) {
@@ -72,6 +57,6 @@ application.models.user = Backbone.Model.extend({
 
         var query = 'UPDATE users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
-        this.db.query(query, _.bind(this.loginResponse, this, 'success', token));
+        application.db.query(query, _.bind(this.loginResponse, this, 'success', token));
     }
 });

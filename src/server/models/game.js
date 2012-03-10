@@ -3,7 +3,6 @@ var _ = require('underscore');
 
 application.models.game = Backbone.Model.extend({
 
-    db: null,
     socket: null,
     sessionid: null,
     cbid: null,
@@ -12,20 +11,6 @@ application.models.game = Backbone.Model.extend({
 
     gameId: null,
     userId: null,
-
-    initialize: function() {
-        var mysql = require('mysql');
-
-        var db = 'memory';
-        var credentials = {
-            user: 'root',
-            password: ''
-        }
-
-        this.db = mysql.createClient(credentials);
-
-        this.db.query('USE memory');
-    },
 
     setSocket: function(socket) {
         this.socket = socket;
@@ -42,7 +27,7 @@ application.models.game = Backbone.Model.extend({
     getGames: function() {
         var query = 'SELECT `id`, `created`, `finished`, `started`, (SELECT COUNT(*) FROM `games_users` AS `gu` WHERE `gu`.`game_id` = `g`.`id`) AS `players` FROM `games` AS `g`';
 
-        this.db.query(query, _.bind(this.sendGamelist, this));
+        application.db.query(query, _.bind(this.sendGamelist, this));
     },
 
     sendGamelist: function(err, results, fields) {
@@ -68,7 +53,7 @@ application.models.game = Backbone.Model.extend({
 
         var query = 'INSERT INTO games (created, started, finished) VALUES ("' +
                     data.model.created + '", "' + data.model.started + '", "' + data.model.finished + '")';
-        this.db.query(query, _.bind(this.sendGameInfo, this));
+        application.db.query(query, _.bind(this.sendGameInfo, this));
     },
 
     createGameData: function(err, results, fields) {
@@ -80,7 +65,7 @@ application.models.game = Backbone.Model.extend({
 
         var query = 'INSERT INTO cards (`game_id`, `card`, `order`) VALUES ' + models.join(',');
 
-        this.db.query(query, _.bind(this.sendGameInfoToClient, this));
+        application.db.query(query, _.bind(this.sendGameInfoToClient, this));
     },
 
     getGameData: function() {
@@ -115,7 +100,7 @@ application.models.game = Backbone.Model.extend({
 
     sendGameInfo: function(err, results, fields) {
         var query = 'SELECT LAST_INSERT_ID() AS id';
-        this.db.query(query, _.bind(this.createGameData, this));
+        application.db.query(query, _.bind(this.createGameData, this));
     },
 
     sendGameInfoToClient: function(err, results, fields) {
@@ -125,7 +110,6 @@ application.models.game = Backbone.Model.extend({
             sessionid: this.sessionid,
             payload: this.modelData
         };
-
         this.socket.emit('reply', data);
         this.socket.broadcast.emit('createGame', this.modelData);
         this.socket.emit('createGame', this.modelData);
@@ -133,7 +117,7 @@ application.models.game = Backbone.Model.extend({
 
     joinGame: function(data) {
         var query = 'REPLACE INTO games_users (user_id, game_id, `order`) VALUES ((SELECT id FROM users WHERE token = "' + data.token + '"), "' + data.model.id + '", (SELECT IF(MAX(`order`) IS NULL,1, MAX(`order`) + 1) FROM games_users AS t2 WHERE t2.game_id = "' + data.model.id + '"))';
-        this.db.query(query, _.bind(this.sendJoinInfo, this));
+        application.db.query(query, _.bind(this.sendJoinInfo, this));
     },
 
     sendJoinInfo: function(err, results, fields) {
@@ -151,7 +135,7 @@ application.models.game = Backbone.Model.extend({
 
     getGame: function(data) {
         var query = 'SELECT `card`, `order`, `game_id` FROM `cards` WHERE `game_id` = ' + data.model.id + ' ORDER BY `order`';
-        this.db.query(query, _.bind(this.sendCards, this));
+        application.db.query(query, _.bind(this.sendCards, this));
     },
 
     sendCards: function(err, result, fields) {
@@ -169,14 +153,12 @@ application.models.game = Backbone.Model.extend({
         this.gameId = data.model.id;
 
         var query = 'UPDATE `games` SET `started` = 1 WHERE `id` = "' + data.model.id + '"';
-        this.db.query(query, _.bind(this.getActiveUser, this));
+        application.db.query(query, _.bind(this.getActiveUser, this));
     },
 
     getActiveUser: function() {
         var query = 'SELECT `order` FROM games_users WHERE game_id = "' + this.gameId + '" AND active = 1';
-        console.log('getActiveUser');
-        console.log(query);
-        this.db.query(query, _.bind(this.findNextUser, this));
+        application.db.query(query, _.bind(this.findNextUser, this));
     },
 
     findNextUser: function(err, result, fields) {
@@ -185,9 +167,7 @@ application.models.game = Backbone.Model.extend({
         } else {
             result = result.pop();
             var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = "' + (result.order + 1) + '"';
-            console.log('findNextUser');
-            console.log(query);
-            this.db.query(query, _.bind(this.checkIfUserExists, this));
+            application.db.query(query, _.bind(this.checkIfUserExists, this));
         }
     },
 
@@ -201,9 +181,7 @@ application.models.game = Backbone.Model.extend({
 
     getFirstPlayer: function() {
         var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = 1';
-        console.log('getFirstPlayer');
-        console.log(query);
-        this.db.query(query, _.bind(this.notifyUsers, this));
+        application.db.query(query, _.bind(this.notifyUsers, this));
     },
 
     notifyUsers: function(err, result, fields) {
@@ -213,7 +191,7 @@ application.models.game = Backbone.Model.extend({
 
         // set active
         var query = 'UPDATE games_users SET active = 0 WHERE game_id = "' + this.gameId + '"';
-        this.db.query(query, _.bind(this.setActive, this));
+        application.db.query(query, _.bind(this.setActive, this));
 
         var modelData = {
             user: result.token,
@@ -234,12 +212,10 @@ application.models.game = Backbone.Model.extend({
 
     setActive: function(err, result, fields) {
         var query = 'UPDATE games_users SET active = 1 WHERE game_id = "' + this.gameId + '" AND user_id = (SELECT id FROM users WHERE token = "' + this.userId + '")';
-        this.db.query(query, function() {});
+        application.db.query(query, function() {});
     },
 
     setGameId: function(gameId) {
         this.gameId = gameId;
     }
-
-
 });

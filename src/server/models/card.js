@@ -3,7 +3,6 @@ var _ = require('underscore');
 
 application.models.card = Backbone.Model.extend({
 
-    db: null,
     socket: null,
     sessionid: null,
     cbid: null,
@@ -11,20 +10,6 @@ application.models.card = Backbone.Model.extend({
     game: null,
     gameId: null,
     cardId: null,
-
-    initialize: function() {
-        var mysql = require('mysql');
-
-        var db = 'memory';
-        var credentials = {
-            user: 'root',
-            password: ''
-        }
-
-        this.db = mysql.createClient(credentials);
-
-        this.db.query('USE memory');
-    },
 
     setSocket: function(socket) {
         this.socket = socket;
@@ -46,7 +31,7 @@ application.models.card = Backbone.Model.extend({
 
         // gibt es eine umgedrehte karte?
         var query = 'SELECT * FROM `cards` WHERE `active` = 1 AND `status` = 1 AND `game_id` = ' + this.gameId;
-        this.db.query(query, _.bind(this.handleTurnedCard, this));
+        application.db.query(query, _.bind(this.handleTurnedCard, this));
     },
 
     handleTurnedCard: function(err, result, fields) {
@@ -55,7 +40,7 @@ application.models.card = Backbone.Model.extend({
         }
 
         var query = 'UPDATE `cards` SET `status` = 1 WHERE `game_id` = "' + this.gameId + '" AND `order` = "' + this.cardId + '"';
-        this.db.query(query, function() {});
+        application.db.query(query, function() {});
         var turnCard = [{
             gameId: this.gameId,
             cardId: this.cardId,
@@ -69,7 +54,7 @@ application.models.card = Backbone.Model.extend({
             var bg = '/img/c' + result.card + '.jpg'
             if (bg == this.bg) {
                 var query = 'UPDATE `cards` SET `active` = 0, `status` = 0, turned_by_user = (SELECT id FROM users WHERE token = "' + this.token + '") WHERE `game_id` = "' + this.gameId + '" AND (`order` = "' + this.cardId + '" OR `order` = "' + result.order + '")';
-                this.db.query(query, function() {});
+                application.db.query(query, function() {});
                 var turnCard = [{
                     gameId: result.game_id,
                     cardId: result.order,
@@ -90,7 +75,7 @@ application.models.card = Backbone.Model.extend({
 
     resetStatus: function(result) {
         var query = 'UPDATE `cards` SET `status` = 0 WHERE `game_id` = "' + this.gameId + '"';
-        this.db.query(query, function() {});
+        application.db.query(query, function() {});
 
         var turnCard = [{
             gameId: result.game_id,

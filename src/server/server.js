@@ -2,8 +2,20 @@ var io = require('socket.io').listen(1337);
 
 application = {
     models: {},
-    views: {}
+    views: {},
+    db: null
 };
+
+var mysql = require('mysql');
+
+var db = 'memory';
+var credentials = {
+    user: 'root',
+    password: ''
+}
+
+application.db = mysql.createClient(credentials);
+application.db.query('USE memory');
 
 io.sockets.on('connection', function (socket) {
 
