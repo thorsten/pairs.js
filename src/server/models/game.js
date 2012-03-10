@@ -11,6 +11,7 @@ application.models.game = Backbone.Model.extend({
     modelData: null,
 
     gameId: null,
+    userId: null,
 
     initialize: function() {
         var mysql = require('mysql');
@@ -172,11 +173,13 @@ application.models.game = Backbone.Model.extend({
     },
 
     getActiveUser: function() {
+        console.log('getActiveUser');
         var query = 'SELECT `order` FROM games_users WHERE game_id = "' + this.gameId + '" AND active = 1';
         this.db.query(query, _.bind(this.findNextUser, this));
     },
 
     findNextUser: function(err, result, fields) {
+        console.log('findNextUser');
         if (_.isEmpty(result)) {
             this.getFirstPlayer();
         } else {
@@ -187,12 +190,22 @@ application.models.game = Backbone.Model.extend({
     },
 
     getFirstPlayer: function() {
+        console.log('getFirstPlayer');
         var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = 1';
+        console.log(query);
         this.db.query(query, _.bind(this.notifyUsers, this));
     },
 
     notifyUsers: function(err, result, fields) {
+        console.log('notifiyUsers');
+        console.log(result);
         var result = result.pop();
+
+        this.userId = result.token;
+
+        // set active
+        var query = 'UPDATE games_users SET active = 0 WHERE game_id = "' + this.gameId + '"';
+        this.db.query(query, _.bind(this.setActive, this));
 
         var modelData = {
             user: result.token,
@@ -209,6 +222,15 @@ application.models.game = Backbone.Model.extend({
         this.socket.emit('reply', data);
         this.socket.broadcast.emit('turn', modelData);
         this.socket.emit('turn', modelData);
+    },
+
+    setActive: function(err, result, fields) {
+        var query = 'UPDATE games_users SET active = 1 WHERE game_id = "' + this.gameId + '" AND user_id = (SELECT id FROM users WHERE token = "' + result.token + '")';
+        this.db.query(query, function() {});
+    },
+
+    setGameId: function(gameId) {
+        this.gameId = gameId;
     }
 
 

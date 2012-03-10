@@ -18,7 +18,7 @@ define(function() { return Backbone.Model.extend({
             }
 
             if (this.get('status') == 0 && this.get('active') == 1) {
-                this.save({'status': 1});
+                this.save({'status': 1}, {silent: true});
             }
         }
 

@@ -25,7 +25,6 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('game', function(data) {
-
         require('./models/game.js');
 
         var game = new application.models.game();
@@ -62,9 +61,18 @@ io.sockets.on('connection', function (socket) {
 
         var card = new application.models.card();
 
+        require('./models/game.js');
+
+        var game = new application.models.game();
+
         card.setSocket(socket);
         card.setSessionid(data.sessionid);
         card.setCbid(data.id);
+
+        card.setGame(game);
+        game.setSocket(socket);
+        game.setSessionid(data.sessionid);
+        game.setCbid(null);
 
         switch (data.method) {
             case 'update':

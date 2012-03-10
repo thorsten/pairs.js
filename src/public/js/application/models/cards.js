@@ -9,9 +9,9 @@ define(function() { return Backbone.Collection.extend({
         usersTurn: false,
 
         initialize: function() {
-            this.on('change', _.bind(this.handleStatusChange, this));
+            //this.on('change', _.bind(this.handleStatusChange, this));
         },
-
+/*
         handleStatusChange: function(card) {
             if (card.get('active') == 1 && card.get('status') == 1) {
                 if (this.timeout != null) {
@@ -52,7 +52,7 @@ define(function() { return Backbone.Collection.extend({
                 this.activeFirst = null;
                 this.activeSecond = null;
             }
-        },
+        },*/
 
         setGameId: function(gameId) {
             this.game = gameId;
@@ -101,8 +101,16 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurnCard: function(data) {
-            console.log(this.at(data));
-            this.at(data).set({'status': 1});
+            data.forEach(_.bind(this.changeCardProperties, this));
+        },
+
+        changeCardProperties: function(values) {
+            var card = {
+                active: values.active,
+                status: values.status
+            };
+
+            this.at(values.cardId).set(card);
         }
     });
 });
