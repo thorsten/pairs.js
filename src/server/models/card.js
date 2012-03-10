@@ -66,16 +66,9 @@ application.models.card = Backbone.Model.extend({
 
         if (!(_.isEmpty(result))) {
             var result = result.pop();
-            console.log('_____________');
-            console.log(result)
-            console.log('_____________');
-
             var bg = '/img/c' + result.card + '.jpg'
-            console.log(bg);
-            console.log(this.bg);
             if (bg == this.bg) {
                 var query = 'UPDATE `cards` SET `active` = 0, `status` = 0, turned_by_user = (SELECT id FROM users WHERE token = "' + this.token + '") WHERE `game_id` = "' + this.gameId + '" AND (`order` = "' + this.cardId + '" OR `order` = "' + result.order + '")';
-                console.log(query);
                 this.db.query(query, function() {});
                 var turnCard = [{
                     gameId: result.game_id,
@@ -112,8 +105,8 @@ application.models.card = Backbone.Model.extend({
         }]
         this.emitTurnCard(turnCard);
 
-
         this.game.setGameId(this.gameId);
+
         this.game.getActiveUser();
     },
 

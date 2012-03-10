@@ -33,6 +33,10 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurn: function(data) {
+            if (data.game != this.game) {
+                return false;
+            }
+
             if (this.started == false) {
                 this.started = true;
                 this.each(function(item) {
@@ -54,6 +58,10 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurnCard: function(data) {
+            if (this.game != data[0].gameId) {
+                return false;
+            }
+
             if (data.length == 2 && data[0].status == 0 && data[0].active == 1) {
                 this.cleanUp();
             }
