@@ -174,6 +174,8 @@ application.models.game = Backbone.Model.extend({
 
     getActiveUser: function() {
         var query = 'SELECT `order` FROM games_users WHERE game_id = "' + this.gameId + '" AND active = 1';
+        console.log('getActiveUser');
+        console.log(query);
         this.db.query(query, _.bind(this.findNextUser, this));
     },
 
@@ -183,12 +185,24 @@ application.models.game = Backbone.Model.extend({
         } else {
             result = result.pop();
             var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = "' + (result.order + 1) + '"';
-            this.db.query(query, _.bind(this.notifyUsers, this));
+            console.log('findNextUser');
+            console.log(query);
+            this.db.query(query, _.bind(this.checkIfUserExists, this));
+        }
+    },
+
+    checkIfUserExists: function(err, result, fields) {
+        if (_.isEmpty(result)) {
+            this.getFirstPlayer();
+        } else {
+            this.notifyUsers(err, result, fields);
         }
     },
 
     getFirstPlayer: function() {
         var query = 'SELECT u.token FROM games_users AS gu LEFT JOIN users  AS u ON gu.user_id = u.id WHERE game_id = "' + this.gameId + '" AND `order` = 1';
+        console.log('getFirstPlayer');
+        console.log(query);
         this.db.query(query, _.bind(this.notifyUsers, this));
     },
 
@@ -219,7 +233,7 @@ application.models.game = Backbone.Model.extend({
     },
 
     setActive: function(err, result, fields) {
-        var query = 'UPDATE games_users SET active = 1 WHERE game_id = "' + this.gameId + '" AND user_id = (SELECT id FROM users WHERE token = "' + result.token + '")';
+        var query = 'UPDATE games_users SET active = 1 WHERE game_id = "' + this.gameId + '" AND user_id = (SELECT id FROM users WHERE token = "' + this.userId + '")';
         this.db.query(query, function() {});
     },
 

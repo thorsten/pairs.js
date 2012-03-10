@@ -33,6 +33,7 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurn: function(data) {
+
             if (data.game != this.game) {
                 return false;
             }
@@ -42,14 +43,14 @@ define(function() { return Backbone.Collection.extend({
                 this.each(function(item) {
                     item.set({'active': 1});
                 });
+            }
 
-                if (this.socket.token == data.user) {
-                    this.usersTurn = true;
-                    // nutzer ist dran
-                } else {
-                    this.usersTurn = false;
-                    // nutzer ist nicht dran
-                }
+            if (this.socket.token == data.user) {
+                this.usersTurn = true;
+                // nutzer ist dran
+            } else {
+                this.usersTurn = false;
+                // nutzer ist nicht dran
             }
         },
 
