@@ -4,7 +4,6 @@ var _ = require('underscore');
 application.models.card = Backbone.Model.extend({
 
     socket: null,
-    sessionid: null,
     cbid: null,
 
     game: null,
@@ -13,10 +12,6 @@ application.models.card = Backbone.Model.extend({
 
     setSocket: function(socket) {
         this.socket = socket;
-    },
-
-    setSessionid: function(sessionid) {
-        this.sessionid = sessionid;
     },
 
     setCbid: function(cbid) {

@@ -49,19 +49,6 @@ define(["application/controllers/card", "application/controllers/login",
             clientId = new Date().getTime();
 
             Backbone.sync = function(method, model, options) {
-
-                // method: create, read, update, delete
-                var allowedMethods = ['create', 'read', 'update', 'delete', 'join', 'start'];
-
-                if (_.indexOf(allowedMethods, method) == -1) {
-                    return false;
-                }
-
-                var cbs = {
-                    success: options.success,
-                    error: options.error
-                };
-
                 var id = 0;
 
                 if (null == register) {
@@ -74,7 +61,10 @@ define(["application/controllers/card", "application/controllers/login",
                     id = register.lastid + 1;
                 }
                 register.lastid = id;
-                register.callbacks[id] = cbs;
+                register.callbacks[id] = {
+                    success: options.success,
+                    error: options.error
+                };
 
                 var payload = {
                     method: method,
@@ -101,8 +91,7 @@ define(["application/controllers/card", "application/controllers/login",
                         socket.token = data.token;
                     }
 
-                    if (data.sessionid == clientId
-                        && register.callbacks.hasOwnProperty(data.id)) {
+                    if (register.callbacks.hasOwnProperty(data.id)) {
                         if (register.callbacks[data.id].hasOwnProperty(data.success)) {
                             var func = register.callbacks[data.id][data.success];
                             if (_.isFunction(func)) {

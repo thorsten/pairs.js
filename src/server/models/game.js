@@ -4,7 +4,6 @@ var _ = require('underscore');
 application.models.game = Backbone.Model.extend({
 
     socket: null,
-    sessionid: null,
     cbid: null,
 
     modelData: null,
@@ -14,10 +13,6 @@ application.models.game = Backbone.Model.extend({
 
     setSocket: function(socket) {
         this.socket = socket;
-    },
-
-    setSessionid: function(sessionid) {
-        this.sessionid = sessionid;
     },
 
     setCbid: function(cbid) {
@@ -41,7 +36,6 @@ application.models.game = Backbone.Model.extend({
         var data = {
             success: 'success',
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: response
         }
 
@@ -107,7 +101,6 @@ application.models.game = Backbone.Model.extend({
         var data = {
             success: 'success',
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: this.modelData
         };
         this.socket.emit('reply', data);
@@ -124,7 +117,6 @@ application.models.game = Backbone.Model.extend({
         var data = {
             success: 'success',
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: {'join': 'true'}
         };
 
@@ -142,7 +134,6 @@ application.models.game = Backbone.Model.extend({
         var data = {
             success: 'success',
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: result
         };
 
@@ -201,7 +192,6 @@ application.models.game = Backbone.Model.extend({
         var data = {
             success: 'success',
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: {'turn': 'result'}
         };
 
