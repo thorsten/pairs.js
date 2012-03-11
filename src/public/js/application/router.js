@@ -46,22 +46,16 @@ define(["application/controllers/card", "application/controllers/login",
             var socket = this._openSocket();
             register = null;
 
-            clientId = new Date().getTime();
-
             Backbone.sync = function(method, model, options) {
-                var id = 0;
-
                 if (null == register) {
                     register =  {
-                        lastid: null,
+                        lastid: 0,
                         callbacks: {}
                     };
-                    register.callbacks
                 } else {
-                    id = register.lastid + 1;
+                    register.lastid += 1;
                 }
-                register.lastid = id;
-                register.callbacks[id] = {
+                register.callbacks[register.lastid] = {
                     success: options.success,
                     error: options.error
                 };
@@ -69,7 +63,7 @@ define(["application/controllers/card", "application/controllers/login",
                 var payload = {
                     method: method,
                     model: model,
-                    id: id
+                    id: register.lastid
                 };
 
                 var url = model.url;

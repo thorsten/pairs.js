@@ -62,6 +62,8 @@ application.models.card = Backbone.Model.extend({
                     active: 0
                 }];
                 this.emitTurnCard(turnCard);
+                var query = 'SELECT * FROM `cards` WHERE `turned_by_user` IS NULL AND `game_id` = "' + this.gameId + '"';
+                application.db.query(query, _.bind(this.getStats, this));
             } else {
                 setTimeout(_.bind(this.resetStatus, this, result), 2000);
             }
@@ -94,6 +96,31 @@ application.models.card = Backbone.Model.extend({
         this.socket.emit('reply', data);
         this.socket.broadcast.emit('turnCard', data);
         this.socket.emit('turnCard', data);
+    },
+
+    getStats: function(err, result, fields) {
+        if (_.isEmpty(result)) {
+            var query = 'SELECT (COUNT(`c`.`card`) / 2) AS `cnt`, `u`.`username` FROM `cards` AS `c` LEFT JOIN `users` AS `u` ON `u`.`id` = `c`.`turned_by_user` WHERE `c`.`game_id` = "' + this.gameId + '" GROUP BY `c`.`turned_by_user`';
+            application.db.query(query, _.bind(this.emitFinish, this));
+        }
+    },
+
+    emitFinish: function(err, result, fields) {
+
+        var data = {
+            gameId: this.gameId,
+            players: []
+        };
+
+        for (var i = 0; i < result.length; i++) {
+            data.players.push({
+                name: result[i].username,
+                count: result[i].cnt
+            });
+        }
+
+        this.socket.emit('finished', data);
+        this.socket.broadcast.emit('finished', data);
     },
 
     setGame: function(game) {

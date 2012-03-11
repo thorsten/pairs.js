@@ -30,6 +30,7 @@ define(function() { return Backbone.Collection.extend({
         handleSocket: function() {
             this.socket.on('turn', _.bind(this.handleTurn, this));
             this.socket.on('turnCard', _.bind(this.handleTurnCard, this));
+            this.socket.on('finished', _.bind(this.finished, this));
         },
 
         handleTurn: function(data) {
@@ -93,6 +94,21 @@ define(function() { return Backbone.Collection.extend({
             }
 
             return (activeCount > 2) ? true : false;
+        },
+
+        finished: function(data) {
+            if (data.gameId != this.game) {
+                return false;
+            }
+
+            var result = $('<div></div>');
+
+            for (var i = 0; i < data.players.length; i++) {
+                result.append($('<div>' + data.players[i].username + ': ' + data.players[i].cnt + '</div>'));
+            }
+            result.append($('<div><a href="/#game">Back to game list</a></div>'));
+
+            $('body').append(result);
         }
     });
 });
