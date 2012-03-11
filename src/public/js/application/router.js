@@ -69,9 +69,7 @@ define(["application/controllers/card", "application/controllers/login",
                 var payload = {
                     method: method,
                     model: model,
-                    options: options,
-                    id: id,
-                    sessionid: clientId
+                    id: id
                 };
 
                 var url = model.url;
