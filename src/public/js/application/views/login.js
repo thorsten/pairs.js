@@ -7,15 +7,10 @@ define(["text!application/views/login.html"], function(template) { return Backbo
         'submit': 'login'
     },
 
-    initialize: function() {
-        this.$('.memory-login-form').on(
-            'submit', _.bind(this.login, this)
-        )
-    },
-
     render: function() {
         $(this.el).html(template);
         $('#container').html(this.el);
+        $('.memory-login-form').on('submit', _.bind(this.login, this));
     },
 
     login: function(e) {
