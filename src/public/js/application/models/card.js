@@ -1,5 +1,7 @@
 define(function() { return Backbone.Model.extend({
 
+        url: 'card',
+
         defaults: {
             'background': '',
             'status': 0,
@@ -11,8 +13,12 @@ define(function() { return Backbone.Model.extend({
         },
 
         toggleStatus: function() {
+            if (!this.collection.isUsersTurn() || this.collection.moreThanTwoActive()) {
+                return;
+            }
+
             if (this.get('status') == 0 && this.get('active') == 1) {
-                this.set({'status': 1});
+                this.save({'status': 1}, {silent: true});
             }
         }
 

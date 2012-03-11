@@ -10,58 +10,53 @@ application.models.user = Backbone.Model.extend({
         password: ''
     },
 
-    db: null,
     socket: null,
-
-    initialize: function() {
-        /*this.db = require('./db.js');
-        //this.db = client;*/
-
-        var mysql = require('mysql');
-
-        var db = 'memory';
-        var credentials = {
-            user: 'root',
-            password: ''
-        }
-
-        this.db = mysql.createClient(credentials);
-
-        this.db.query('USE memory');
-    },
+    sessionid: null,
+    cbid: null,
 
     setSocket: function(socket) {
         this.socket = socket;
     },
 
+    setSessionid: function(sessionid) {
+        this.sessionid = sessionid;
+    },
+
+    setCbid: function(cbid) {
+        this.cbid = cbid;
+    },
+
     checkLogin: function() {
         var query = 'SELECT * FROM users WHERE username = "' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
-        this.db.query(query, _.bind(this.isUserLoggedIn, this));
+        application.db.query(query, _.bind(this.isUserLoggedIn, this));
     },
 
     isUserLoggedIn: function(err, results, fields) {
         if (!(_.isEmpty(results))) {
             this.generateToken();
         } else {
-            this.loginResponse(false, '');
+            this.loginResponse('error', '');
         }
     },
 
     loginResponse: function(success, token) {
         var data = {
             success: success,
-            token: token
+            token: token,
+            id: this.cbid,
+            sessionid: this.sessionid,
+            payload: ''
         }
 
-        this.socket.emit('loginSuccess', data);
+        this.socket.emit('reply', data);
     },
 
     generateToken: function() {
-        var token = this.defaultToken;
+        var token = new Date().getTime();
 
-        var query = 'INSERT INTO users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
+        var query = 'UPDATE users SET token = "' + token + '" WHERE username ="' + this.get('username') + '" AND password = MD5("' + this.get('password') + '")';
 
-        this.db.query(query, _.bind(this.loginResponse, this, true, token));
+        application.db.query(query, _.bind(this.loginResponse, this, 'success', token));
     }
 });

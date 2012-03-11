@@ -8,11 +8,12 @@ define(function() { return Backbone.View.extend({
         },
 
         render: function() {
+            $('#container').html('');
+
             this.buildRaster();
 
-            this.model.each(function(item) {
-                item.set({'active': 1});
-            });
+            $('#container').append('<div><input type="button" id="start" value="START" /></div>');
+            $('#start').on('click', _.bind(this.model.startGame, this.model));
         },
 
         buildRaster: function() {

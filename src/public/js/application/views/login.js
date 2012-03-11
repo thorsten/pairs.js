@@ -18,15 +18,14 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     login: function(e) {
         e.preventDefault();
 
-
         var data = {
             username: $('#username').val(),
             password: $('#password').val()
         };
 
-        this.model.set(data);
-
-        this.model.trigger('login');
+        this.model.save(data, {
+            'success': _.bind(this.model.onSuccess, this.model)
+        });
     }
 });
 });

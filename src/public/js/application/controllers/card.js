@@ -2,27 +2,57 @@ define(["application/models/card", "application/views/card", "application/models
     "application/views/stats"],
     function(models_card, views_card, models_cards, views_cards, views_stats) {
 
-        function controller(){};
+        function controller(){
+            game: null;
+            socket: null;
+        };
 
-        controller.prototype.startAction = function(socket) {
+        /*
+        @todo use instance of models_game here instead of fake model
+         */
+        controller.prototype.startAction = function(socket, id) {
+
+            socket.socket.removeAllListeners('reply');
+            socket.socket.removeAllListeners('createGame');
+
+            this.socket = socket;
+
+            this.game = id;
+
+            var model = {
+                id: id,
+                url: 'game'
+            };
+
+            var options = {'success': _.bind(this.buildGame, this)}
+
+            Backbone.sync('join', model, options);
+        };
+
+        controller.prototype.buildGame = function(data) {
 
             var cards = [];
 
-            for (var i = 1; i < 19; i++) {
-                var data = {'background': '/img/c' + i + '.jpg'};
-                var m1 = new models_card(data);
+            for (var i = 0; i < data.length; i++) {
+                var bg = {
+                    'id': data[i]['order'],
+                    'background': '/img/c' + data[i].card + '.jpg',
+                    'game_id': data[i]['game_id']
+                };
+                var m1 = new models_card(bg);
                 new views_card({model: m1});
+
                 cards.push(m1);
-                var m2 = new models_card(data);
-                new views_card({model: m2});
-                cards.push(m2);
             }
 
             var collection = new models_cards(cards);
 
-            collection.shuffle();
-
             var collectionView = new views_cards({model: collection});
+
+            collection.setGameId(this.game);
+            collection.setSocket(this.socket);
+            collection.handleSocket();
+
             collectionView.render();
 
             var statsView = new views_stats();
