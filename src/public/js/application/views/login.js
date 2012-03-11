@@ -8,6 +8,9 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     },
 
     initialize: function() {
+        this.$('.memory-login-form').on(
+            'submit', _.bind(this.login, this)
+        )
     },
 
     render: function() {
