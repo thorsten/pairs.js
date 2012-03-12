@@ -1,4 +1,4 @@
-define(function() { return Backbone.View.extend({
+define(["text!application/views/stats.html"], function (template) { return Backbone.View.extend({
 
     className: 'stats',
     tagName: 'div',
@@ -7,14 +7,9 @@ define(function() { return Backbone.View.extend({
     clickCount: 0,
 
     render: function() {
-        var template = '<div style="clear:both;"><div style="float:left; margin-right: 5px;">Clicks:</div><div style="float:left; width:570px;" id="clicks">0</div><div style="float:left;" id="timer">00:00</div></div>';
-
         $(this.el).html(template);
-
         $('#container').append(this.el);
-
         $('body').on('click', _.bind(this.clicks, this));
-
         this.counter();
     },
 
