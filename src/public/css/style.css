@@ -3515,9 +3515,6 @@ body footer {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#52575c', endColorstr='#3a3f44', GradientType=0);
   color: #ffffff;
 }
-.span2 div.card {
-  height: 140px;
-}
 .memory-login {
   margin: auto;
 }
