@@ -1,6 +1,6 @@
 define(function() { return Backbone.View.extend({
 
-        className: 'card',
+        className: 'card memory-card',
         tagName: 'img',
     
         events: {'click': 'turnCard'},
@@ -11,7 +11,7 @@ define(function() { return Backbone.View.extend({
         
         render: function() {
             var attrs = {
-                    'height': '100' 
+                    'height': '100'
                     };
             
             if (this.model.get('status') == 1) {
@@ -21,7 +21,7 @@ define(function() { return Backbone.View.extend({
             }
             
             if (this.model.get('active') == 0) {
-                $(this.el).css('visibility', 'hidden');
+                $(this.el).addClass('hide');
             }
             
             $(this.el).attr(attrs);
