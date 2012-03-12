@@ -5,7 +5,7 @@ define(function() { return Backbone.Model.extend({
     token: null,
 
     defaults: {
-        url: 'workshop.local',
+        url: 'memory.basti.dev',
         port: '1337'
     },
 

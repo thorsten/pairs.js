@@ -33,9 +33,14 @@ define(function() { return Backbone.View.extend({
         $('#timer').html(min + ':' + sek);
     },
 
-    clicks: function() {
-        this.clickCount += 1;
-        $('#clicks').html(this.clickCount);
+    clicks: function(e) {
+        var target = $(e.target);
+
+        if (target.context.tagName == 'IMG'
+            && target.attr('class') == 'card memory-card') {
+            this.clickCount += 1;
+            $('#clicks').html(this.clickCount);
+        }
     }
 });
 });
