@@ -3518,18 +3518,6 @@ body footer {
 .memory-login {
   margin: auto;
 }
-.row {
-  clear: both;
-}
-.row .cell {
-  float: left;
-}
-.cell {
-  overflow: hidden;
-  height: 100px;
-  width: 100px;
-  margin: 5px;
-}
 #container .active {
   border: 3px solid #9d261d;
   margin: 2px;

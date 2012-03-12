@@ -28,7 +28,7 @@ define(["text!application/views/stats.html"], function (template) { return Backb
         $('#timer').html(min + ':' + sek);
     },
 
-    clicks: function() {
+    clicks: function(e) {
         this.clickCount += 1;
         $('#clicks').html(this.clickCount);
     }
