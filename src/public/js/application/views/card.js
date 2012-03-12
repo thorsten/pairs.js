@@ -22,7 +22,7 @@ define(function() { return Backbone.View.extend({
             }
             
             if (this.model.get('active') == 0) {
-                $(this.el).addClass('hide');
+                $(this.el).addClass('invisible');
             }
             
             $(this.el).attr(attrs);
