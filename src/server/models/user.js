@@ -11,15 +11,10 @@ application.models.user = Backbone.Model.extend({
     },
 
     socket: null,
-    sessionid: null,
     cbid: null,
 
     setSocket: function(socket) {
         this.socket = socket;
-    },
-
-    setSessionid: function(sessionid) {
-        this.sessionid = sessionid;
     },
 
     setCbid: function(cbid) {
@@ -45,7 +40,6 @@ application.models.user = Backbone.Model.extend({
             success: success,
             token: token,
             id: this.cbid,
-            sessionid: this.sessionid,
             payload: ''
         }
 

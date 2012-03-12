@@ -29,8 +29,13 @@ define(["text!application/views/stats.html"], function (template) { return Backb
     },
 
     clicks: function(e) {
-        this.clickCount += 1;
-        $('#clicks').html(this.clickCount);
+        var target = $(e.target);
+
+        if (target.context.tagName == 'IMG'
+            && target.attr('class') == 'card memory-card') {
+            this.clickCount += 1;
+            $('#clicks').html(this.clickCount);
+        }
     }
 });
 });

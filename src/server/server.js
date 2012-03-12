@@ -30,7 +30,6 @@ io.sockets.on('connection', function (socket) {
         var user = new application.models.user(userData);
 
         user.setSocket(socket);
-        user.setSessionid(data.sessionid);
         user.setCbid(data.id);
 
         user.checkLogin();
@@ -42,7 +41,6 @@ io.sockets.on('connection', function (socket) {
         var game = new application.models.game();
 
         game.setSocket(socket);
-        game.setSessionid(data.sessionid);
         game.setCbid(data.id);
 
         switch (data.method) {
@@ -74,12 +72,10 @@ io.sockets.on('connection', function (socket) {
         var game = new application.models.game();
 
         card.setSocket(socket);
-        card.setSessionid(data.sessionid);
         card.setCbid(data.id);
 
         card.setGame(game);
         game.setSocket(socket);
-        game.setSessionid(data.sessionid);
         game.setCbid(null);
 
         switch (data.method) {
