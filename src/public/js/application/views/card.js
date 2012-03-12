@@ -11,7 +11,8 @@ define(function() { return Backbone.View.extend({
         
         render: function() {
             var attrs = {
-                    'height': '100'
+                    'height': '100',
+                    'width' : '100'
                     };
             
             if (this.model.get('status') == 1) {
