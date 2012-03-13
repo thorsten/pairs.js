@@ -15,7 +15,7 @@ var credentials = {
 }
 
 application.db = mysql.createClient(credentials);
-application.db.query('USE memory');
+application.db.query('USE ' + db);
 
 io.sockets.on('connection', function (socket) {
 

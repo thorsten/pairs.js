@@ -22,8 +22,14 @@ define(["text!application/views/login.html"], function(template) { return Backbo
         };
 
         this.model.save(data, {
-            'success': _.bind(this.model.onSuccess, this.model)
+            'success': _.bind(this.model.onSuccess, this.model),
+            'error': _.bind(this.onError, this)
         });
+    },
+
+    onError: function() {
+        $('#showError').show(500);
+        $('#showError').html('Eingegebener Nutzername oder Kennwort falsch.');
     }
 });
 });

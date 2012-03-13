@@ -45,6 +45,8 @@ application.models.game = Backbone.Model.extend({
     createGame: function(data) {
         this.modelData = data.model;
 
+        var db = mysql.createClient();
+
         var query = 'INSERT INTO games (created, started, finished) VALUES ("' +
                     data.model.created + '", "' + data.model.started + '", "' + data.model.finished + '")';
         application.db.query(query, _.bind(this.sendGameInfo, this));

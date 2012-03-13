@@ -103,12 +103,16 @@ define(function() { return Backbone.Collection.extend({
 
             var result = $('<div></div>');
 
+            var viewData = [];
+
             for (var i = 0; i < data.players.length; i++) {
                 result.append($('<div>' + data.players[i].name + ': ' + Math.floor(data.players[i].count) + '</div>'));
             }
             result.append($('<div><a href="/#game">Back to game list</a></div>'));
 
             $('body').append(result);
+
+            //this.trigger('finished', )
         }
     });
 });
