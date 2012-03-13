@@ -10,6 +10,7 @@ define(["text!application/views/login.html"], function(template) { return Backbo
     render: function() {
         $(this.el).html(template);
         $('#container').html(this.el);
+        $('#showError').hide();
         $('.memory-login-form').on('submit', _.bind(this.login, this));
     },
 
@@ -22,8 +23,14 @@ define(["text!application/views/login.html"], function(template) { return Backbo
         };
 
         this.model.save(data, {
-            'success': _.bind(this.model.onSuccess, this.model)
+            'success': _.bind(this.model.onSuccess, this.model),
+            'error': _.bind(this.onError, this)
         });
+    },
+
+    onError: function(e) {
+        $('#showError').show(500);
+        $('#showError').html('Your login is not valid');
     }
 });
 });
