@@ -34,9 +34,6 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurn: function(data) {
-
-            console.log(this.models);
-
             if (data.game != this.game) {
                 return false;
             }
@@ -50,10 +47,8 @@ define(function() { return Backbone.Collection.extend({
 
             if (this.socket.token == data.user) {
                 this.usersTurn = true;
-                // nutzer ist dran
             } else {
                 this.usersTurn = false;
-                // nutzer ist nicht dran
             }
         },
 
