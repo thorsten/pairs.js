@@ -103,16 +103,11 @@ define(function() { return Backbone.Collection.extend({
                 return false;
             }
 
-            var result = [];
-
             for (var i = 0; i < data.players.length; i++) {
-                result.push({
-                    name: data.players[i].name,
-                    count: Math.floor(data.players[i].count)
-                });
+                data.players[i].count = Math.floor(data.players[i].count);
             }
 
-            this.trigger('finished', result);
+            this.trigger('finished', data.players);
         },
 
         cheat: function() {

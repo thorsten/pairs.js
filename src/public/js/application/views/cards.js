@@ -93,8 +93,10 @@ define(function() { return Backbone.View.extend({
 
             container.html('');
 
+            console.log(data);
+
             for (var i = 0; i < data.length; i++) {
-                container.append($('<div>' + data[i].name + ': ' + data[i].count + '</div>'));
+                container.append($('<div>' + data[i].name + ' - hits: ' +  data[i].hit + ' - misses: ' + data[i].miss + '</div>'));
             }
             container.append($('<div><a href="/#game">Back to game list</a></div>'));
         }

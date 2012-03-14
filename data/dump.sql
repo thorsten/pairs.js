@@ -29,6 +29,8 @@ CREATE TABLE `games_users` (
   `game_id` INT,
   `order` INT,
   `active` TINYINT,
+  `hit` INT,
+  `miss` INT,
   PRIMARY KEY (`user_id`, `game_id`));
 
 INSERT INTO `games_users` (`user_id`, `game_id`, `order`) VALUES
