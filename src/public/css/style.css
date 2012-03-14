@@ -3526,3 +3526,8 @@ img.card {
   height: 100px;
   max-width: none;
 }
+div.card {
+  margin: 5px;
+  height: 100px;
+  width: 100px;
+}
