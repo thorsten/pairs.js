@@ -58,6 +58,7 @@ define(function() { return Backbone.View.extend({
                     }
                     break;
                 case 32:
+                    this.model.trigger('spacePress');
                     this.model.at(this.focus).toggleStatus();
                     break;
                 case 72:
