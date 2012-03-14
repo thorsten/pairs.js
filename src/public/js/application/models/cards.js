@@ -22,7 +22,9 @@ define(function() { return Backbone.Collection.extend({
                 url: 'game'
             };
 
-            var options = {};
+            var options = {
+                'success': this.trigger('started')
+            };
 
             Backbone.sync('start', model, options);
         },

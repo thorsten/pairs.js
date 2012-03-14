@@ -7,6 +7,7 @@ define(function() { return Backbone.View.extend({
             $('body').on('click', _.bind(this.handleClick, this));
 
             this.model.on('finished', _.bind(this.finished, this));
+            this.model.on('started', _.bind(this.gameStarted, this));
         },
 
         render: function() {
@@ -16,6 +17,10 @@ define(function() { return Backbone.View.extend({
 
             $('#container').append('<div><input type="button" id="start" value="START" /></div>');
             $('#start').on('click', _.bind(this.model.startGame, this.model));
+        },
+
+        gameStarted: function() {
+            $('#start').hide();
         },
 
         buildRaster: function() {
