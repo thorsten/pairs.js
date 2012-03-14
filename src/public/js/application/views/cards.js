@@ -31,7 +31,7 @@ define(function() { return Backbone.View.extend({
             for (var rows = 0; rows < count; rows++) {
                 var row = $('<div class="row"></div>');
                 for (var cells = 0; cells < count; cells++) {
-                    var cell = $('<div class="span2 card" id="' + id++ + '"></div>');
+                    var cell = $('<div class="span2" id="' + id++ + '"></div>');
                     row.append(cell);
                 }
                 $('#container').append(row);

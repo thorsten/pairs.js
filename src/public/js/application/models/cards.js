@@ -76,7 +76,10 @@ define(function() { return Backbone.Collection.extend({
                 status: values.status
             };
 
-            this.at(values.cardId).set(card);
+            var model = this.at(values.cardId);
+
+            model.set(card);
+            model.trigger('turnCard');
         },
 
         cleanUp: function() {

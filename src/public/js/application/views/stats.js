@@ -36,7 +36,7 @@ define(["text!application/views/stats.html"], function (template) { return Backb
         var target = $(e.target);
 
         if (target.context.tagName == 'IMG'
-            && target.attr('class') == 'card memory-card') {
+            && target.attr('class') == 'card_container') {
             this.incrementClickCount();
         }
     },

@@ -9,7 +9,8 @@ CREATE TABLE `users` (`id` INT PRIMARY KEY AUTO_INCREMENT, `username` VARCHAR(25
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (1, 'thorsten', MD5('thorsten')),
 (2, 'sebastian', MD5('sebastian')),
-(3, 'workshop', MD5('workshop'));
+(3, 'workshop', MD5('workshop')),
+(4, 'admin', MD5('test'));
 
 CREATE TABLE `games` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
