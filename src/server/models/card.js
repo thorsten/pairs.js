@@ -100,7 +100,7 @@ application.models.card = Backbone.Model.extend({
 
     getStats: function(err, result, fields) {
         if (_.isEmpty(result)) {
-            var query = 'SELECT (COUNT(`c`.`card`) / 2) AS `cnt`, `u`.`username` FROM `cards` AS `c` LEFT JOIN `users` AS `u` ON `u`.`id` = `c`.`turned_by_user` WHERE `c`.`game_id` = "' + this.gameId + '" GROUP BY `c`.`turned_by_user`';
+            var query = 'SELECT (COUNT(`c`.`card`) / 2) AS `cnt`, `u`.`username` FROM `cards` AS `c` LEFT JOIN `users` AS `u` ON `u`.`id` = `c`.`turned_by_user` WHERE `c`.`game_id` = "' + this.gameId + '" GROUP BY `c`.`turned_by_user` ORDER BY `cnt` DESC';
             application.db.query(query, _.bind(this.emitFinish, this));
         }
     },
