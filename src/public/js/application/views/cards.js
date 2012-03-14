@@ -58,8 +58,10 @@ define(function() { return Backbone.View.extend({
                     }
                     break;
                 case 32:
-                    this.model.trigger('spacePress');
-                    this.model.at(this.focus).toggleStatus();
+                    if (this.focus > -1) {
+                        this.model.trigger('spacePress');
+                        this.model.at(this.focus).toggleStatus();
+                    }
                     break;
                 case 72:
                     this.focus = this.model.cheat();
