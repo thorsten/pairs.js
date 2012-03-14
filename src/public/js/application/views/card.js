@@ -16,11 +16,14 @@ define(['text!application/views/card.html'], function(template) { return Backbon
             }
 
             $(this.el).attr({id: 'cc' + this.model.id});
-            $(this.el).html(_.template(template, {id: this.model.id}));
+
+            var data = {
+                id: this.model.id,
+                image: this.model.get('background')
+            };
+            $(this.el).html(_.template(template, data));
 
             $('#' + this.model.getPosition()).html(this.el);
-
-            $('#f' + this.model.id).attr({src: this.model.get('background')});
 
             this.delegateEvents();
         },
