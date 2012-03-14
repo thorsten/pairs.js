@@ -3531,3 +3531,28 @@ div.card {
   height: 100px;
   width: 100px;
 }
+tr.row {
+    height: 35px;
+}
+tr.row td {
+    padding-left: 15px;
+}
+
+tr.row td:last-child {
+    padding-right: 15px;
+}
+
+tr.row td input {
+    margin-bottom: 0px;
+}
+
+tr.row:nth-child(even) {background: #CCC}
+tr.row:nth-child(odd) {background: #FFF}
+
+
+
+
+
+
+
+
