@@ -58,6 +58,9 @@ define(function() { return Backbone.View.extend({
                 case 32:
                     this.model.at(this.focus).toggleStatus();
                     break;
+                case 72:
+                    this.focus = this.model.cheat();
+                    break;
             }
             this.handleFocus();
         },

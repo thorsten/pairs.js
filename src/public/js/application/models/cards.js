@@ -35,6 +35,8 @@ define(function() { return Backbone.Collection.extend({
 
         handleTurn: function(data) {
 
+            console.log(this.models);
+
             if (data.game != this.game) {
                 return false;
             }
@@ -113,6 +115,35 @@ define(function() { return Backbone.Collection.extend({
             $('body').append(result);
 
             //this.trigger('finished', )
+        },
+
+        cheat: function() {
+            var pos = null;
+            var activeCount = 0;
+            for (var i = 0; i < this.length; i++) {
+                if (this.models[i].get('active') === 1
+                    && this.models[i].get('status') === 1) {
+                    activeCount += 1;
+                }
+            }
+
+            if (activeCount === 1) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this.models[i].get('active') === 1
+                        && this.models[i].get('status') === 1) {
+                        var bg = this.models[i].get('background');
+                    }
+                }
+                for (var i = 0; i < this.length; i++) {
+                    if (this.models[i].get('active') === 1
+                        && this.models[i].get('status') === 0
+                        && this.models[i].get('background') === bg) {
+                        var pos = this.indexOf(this.models[i]);
+                    }
+                }
+            }
+
+            return pos;
         }
     });
 });
