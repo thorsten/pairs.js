@@ -5,6 +5,8 @@ define(function() { return Backbone.View.extend({
         initialize: function() {
             $('body').on('keydown', _.bind(this.handleKeydown, this));
             $('body').on('click', _.bind(this.handleClick, this));
+
+            this.model.on('finished', _.bind(this.finished, this));
         },
 
         render: function() {
@@ -75,6 +77,18 @@ define(function() { return Backbone.View.extend({
             if (this.focus > -1) {
                 $('#' + this.focus).addClass('active');
             }
+        },
+
+        finished: function(data) {
+
+            var container = $('#container');
+
+            container.html('');
+
+            for (var i = 0; i < data.length; i++) {
+                container.append($('<div>' + data[i].name + ': ' + data[i].count + '</div>'));
+            }
+            container.append($('<div><a href="/#game">Back to game list</a></div>'));
         }
     });
 });
