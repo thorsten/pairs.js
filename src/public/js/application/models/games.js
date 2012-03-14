@@ -25,13 +25,24 @@ define(function() { return Backbone.Collection.extend({
         var date = new Date();
 
         var data = {
-            created: date.getDate() + '.' + (date.getMonth() + 1) + '.' +  date.getFullYear() + ' '
-                     + date.getHours() + ':' + date.getMinutes(),
+            created: this.formatNumber(date.getDate()) + '.'
+                     + this.formatNumber(date.getMonth() + 1) + '.'
+                     + date.getFullYear() + ' '
+                     + this.formatNumber(date.getHours()) + ':'
+                     + this.formatNumber(date.getMinutes()),
             started: 0,
             finished: 0
         };
 
         this.create(data);
+    },
+
+    formatNumber: function(number) {
+        var result = number;
+        if (number < 10) {
+            result = '0' + number;
+        }
+        return result;
     }
 });
 });
