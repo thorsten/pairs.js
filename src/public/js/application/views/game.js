@@ -1,7 +1,7 @@
 define(["text!application/views/game.html"], function(template) { return Backbone.View.extend({
 
-    className: 'game',
-    tagName: 'div',
+    className: 'row',
+    tagName: 'tr',
 
     events: {
         'click #join': 'joinGame'

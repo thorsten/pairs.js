@@ -24,12 +24,11 @@ application.models.card = Backbone.Model.extend({
         this.bg = data.model.background;
         this.token = data.token;
 
-        // gibt es eine umgedrehte karte?
         var query = 'SELECT * FROM `cards` WHERE `active` = 1 AND `status` = 1 AND `game_id` = ' + this.gameId;
-        application.db.query(query, _.bind(this.handleTurnedCard, this));
+        application.db.query(query, _.bind(this.checkOnTurnedCards, this));
     },
 
-    handleTurnedCard: function(err, result, fields) {
+    checkOnTurnedCards: function(err, result, fields) {
         if (result.length > 1) {
             return;
         }
@@ -48,26 +47,47 @@ application.models.card = Backbone.Model.extend({
             var result = result.pop();
             var bg = '/img/c' + result.card + '.jpg'
             if (bg == this.bg) {
-                var query = 'UPDATE `cards` SET `active` = 0, `status` = 0, turned_by_user = (SELECT id FROM users WHERE token = "' + this.token + '") WHERE `game_id` = "' + this.gameId + '" AND (`order` = "' + this.cardId + '" OR `order` = "' + result.order + '")';
-                application.db.query(query, function() {});
-                var turnCard = [{
-                    gameId: result.game_id,
-                    cardId: result.order,
-                    status: 0,
-                    active: 0
-                }, {
-                    gameId: this.gameId,
-                    cardId: this.cardId,
-                    status: 0,
-                    active: 0
-                }];
-                this.emitTurnCard(turnCard);
-                var query = 'SELECT * FROM `cards` WHERE `turned_by_user` IS NULL AND `game_id` = "' + this.gameId + '"';
-                application.db.query(query, _.bind(this.getStats, this));
+                this.hit(result);
             } else {
-                setTimeout(_.bind(this.resetStatus, this, result), 2000);
+                this.miss(result);
             }
         }
+    },
+
+    hit: function(data) {
+        var query = 'UPDATE `cards` SET `active` = 0, `status` = 0, turned_by_user = (SELECT id FROM users WHERE token = "' + this.token + '") WHERE `game_id` = "' + this.gameId + '" AND (`order` = "' + this.cardId + '" OR `order` = "' + data.order + '")';
+        application.db.query(query, function() {});
+        var turnCard = [{
+            gameId: data.game_id,
+            cardId: data.order,
+            status: 0,
+            active: 0
+        }, {
+            gameId: this.gameId,
+            cardId: this.cardId,
+            status: 0,
+            active: 0
+        }];
+        this.emitTurnCard(turnCard);
+
+        var query = 'SELECT * '
+                  + 'FROM `cards` '
+                  + 'WHERE `turned_by_user` IS NULL AND `game_id` = "' + this.gameId + '"';
+        application.db.query(query, _.bind(this.getStats, this));
+        this.updateGameStats('hit');
+    },
+
+    miss: function(data) {
+        setTimeout(_.bind(this.resetStatus, this, data), 2000);
+        this.updateGameStats('miss');
+    },
+
+    updateGameStats: function(col) {
+        var query = 'UPDATE games_users '
+                  + 'SET `' + col + '` = IF (`' + col + '` IS NULL, 1, `' + col + '` + 1) '
+                  + 'WHERE game_id = "' + this.gameId + '" '
+                  + 'AND user_id = (SELECT `id` FROM `users` WHERE `token` = "' + this.token + '")';
+        application.db.query(query, function() {});
     },
 
     resetStatus: function(result) {
@@ -100,7 +120,13 @@ application.models.card = Backbone.Model.extend({
 
     getStats: function(err, result, fields) {
         if (_.isEmpty(result)) {
-            var query = 'SELECT (COUNT(`c`.`card`) / 2) AS `cnt`, `u`.`username` FROM `cards` AS `c` LEFT JOIN `users` AS `u` ON `u`.`id` = `c`.`turned_by_user` WHERE `c`.`game_id` = "' + this.gameId + '" GROUP BY `c`.`turned_by_user`';
+            var query = 'SELECT `u`.`username`, `gu`.`hit`, `gu`.`miss`'
+                      + 'FROM `cards` AS `c` '
+                      + 'LEFT JOIN `users` AS `u` ON `u`.`id` = `c`.`turned_by_user` '
+                      + 'LEFT JOIN `games_users` AS `gu` ON `u`.`id` = `gu`.`user_id` AND `c`.`game_id` = `gu`.`game_id` '
+                      + 'WHERE `c`.`game_id` = "' + this.gameId + '" '
+                      + 'GROUP BY `c`.`turned_by_user` '
+                      + 'ORDER BY `gu`.`hit` DESC';
             application.db.query(query, _.bind(this.emitFinish, this));
         }
     },
@@ -115,7 +141,8 @@ application.models.card = Backbone.Model.extend({
         for (var i = 0; i < result.length; i++) {
             data.players.push({
                 name: result[i].username,
-                count: result[i].cnt
+                hit: result[i].hit,
+                miss: result[i].miss
             });
         }
 

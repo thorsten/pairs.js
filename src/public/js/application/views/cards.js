@@ -5,6 +5,9 @@ define(function() { return Backbone.View.extend({
         initialize: function() {
             $('body').on('keydown', _.bind(this.handleKeydown, this));
             $('body').on('click', _.bind(this.handleClick, this));
+
+            this.model.on('finished', _.bind(this.finished, this));
+            this.model.on('started', _.bind(this.gameStarted, this));
         },
 
         render: function() {
@@ -16,6 +19,10 @@ define(function() { return Backbone.View.extend({
             $('#start').on('click', _.bind(this.model.startGame, this.model));
         },
 
+        gameStarted: function() {
+            $('#start').hide();
+        },
+
         buildRaster: function() {
             var count = Math.sqrt(this.model.length);
 
@@ -24,7 +31,7 @@ define(function() { return Backbone.View.extend({
             for (var rows = 0; rows < count; rows++) {
                 var row = $('<div class="row"></div>');
                 for (var cells = 0; cells < count; cells++) {
-                    var cell = $('<div class="span2 card" id="' + id++ + '"></div>');
+                    var cell = $('<div class="span2" id="' + id++ + '"></div>');
                     row.append(cell);
                 }
                 $('#container').append(row);
@@ -56,7 +63,13 @@ define(function() { return Backbone.View.extend({
                     }
                     break;
                 case 32:
-                    this.model.at(this.focus).toggleStatus();
+                    if (this.focus > -1) {
+                        this.model.trigger('spacePress');
+                        this.model.at(this.focus).toggleStatus();
+                    }
+                    break;
+                case 72:
+                    this.focus = this.model.cheat();
                     break;
             }
             this.handleFocus();
@@ -72,6 +85,20 @@ define(function() { return Backbone.View.extend({
             if (this.focus > -1) {
                 $('#' + this.focus).addClass('active');
             }
+        },
+
+        finished: function(data) {
+
+            var container = $('#container');
+
+            container.html('');
+
+            console.log(data);
+
+            for (var i = 0; i < data.length; i++) {
+                container.append($('<div>' + data[i].name + ' - hits: ' +  data[i].hit + ' - misses: ' + data[i].miss + '</div>'));
+            }
+            container.append($('<div><a href="/#game">Back to game list</a></div>'));
         }
     });
 });

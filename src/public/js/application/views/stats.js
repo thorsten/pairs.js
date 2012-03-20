@@ -6,6 +6,10 @@ define(["text!application/views/stats.html"], function (template) { return Backb
     time: 0,
     clickCount: 0,
 
+    initialize: function() {
+        this.model.on('spacePress', _.bind(this.spacePress, this));
+    },
+
     render: function() {
         $(this.el).html(template);
         $('#container').append(this.el);
@@ -32,10 +36,18 @@ define(["text!application/views/stats.html"], function (template) { return Backb
         var target = $(e.target);
 
         if (target.context.tagName == 'IMG'
-            && target.attr('class') == 'card memory-card') {
-            this.clickCount += 1;
-            $('#clicks').html(this.clickCount);
+            && target.attr('class') == 'card_container') {
+            this.incrementClickCount();
         }
+    },
+
+    spacePress: function() {
+        this.incrementClickCount();
+    },
+
+    incrementClickCount: function() {
+        this.clickCount += 1;
+        $('#clicks').html(this.clickCount);
     }
 });
 });

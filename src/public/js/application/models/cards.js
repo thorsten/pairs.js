@@ -22,7 +22,9 @@ define(function() { return Backbone.Collection.extend({
                 url: 'game'
             };
 
-            var options = {};
+            var options = {
+                'success': this.trigger('started')
+            };
 
             Backbone.sync('start', model, options);
         },
@@ -34,7 +36,6 @@ define(function() { return Backbone.Collection.extend({
         },
 
         handleTurn: function(data) {
-
             if (data.game != this.game) {
                 return false;
             }
@@ -48,10 +49,8 @@ define(function() { return Backbone.Collection.extend({
 
             if (this.socket.token == data.user) {
                 this.usersTurn = true;
-                // nutzer ist dran
             } else {
                 this.usersTurn = false;
-                // nutzer ist nicht dran
             }
         },
 
@@ -77,7 +76,10 @@ define(function() { return Backbone.Collection.extend({
                 status: values.status
             };
 
-            this.at(values.cardId).set(card);
+            var model = this.at(values.cardId);
+
+            model.set(card);
+            model.trigger('turnCard');
         },
 
         cleanUp: function() {
@@ -101,14 +103,40 @@ define(function() { return Backbone.Collection.extend({
                 return false;
             }
 
-            var result = $('<div></div>');
-
             for (var i = 0; i < data.players.length; i++) {
-                result.append($('<div>' + data.players[i].username + ': ' + data.players[i].cnt + '</div>'));
+                data.players[i].count = Math.floor(data.players[i].count);
             }
-            result.append($('<div><a href="/#game">Back to game list</a></div>'));
 
-            $('body').append(result);
+            this.trigger('finished', data.players);
+        },
+
+        cheat: function() {
+            var pos = null;
+            var activeCount = 0;
+            for (var i = 0; i < this.length; i++) {
+                if (this.models[i].get('active') === 1
+                    && this.models[i].get('status') === 1) {
+                    activeCount += 1;
+                }
+            }
+
+            if (activeCount === 1) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this.models[i].get('active') === 1
+                        && this.models[i].get('status') === 1) {
+                        var bg = this.models[i].get('background');
+                    }
+                }
+                for (var i = 0; i < this.length; i++) {
+                    if (this.models[i].get('active') === 1
+                        && this.models[i].get('status') === 0
+                        && this.models[i].get('background') === bg) {
+                        var pos = this.indexOf(this.models[i]);
+                    }
+                }
+            }
+
+            return pos;
         }
     });
 });

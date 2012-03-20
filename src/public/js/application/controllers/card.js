@@ -55,7 +55,7 @@ define(["application/models/card", "application/views/card", "application/models
 
             collectionView.render();
 
-            var statsView = new views_stats();
+            var statsView = new views_stats({model: collection});
             statsView.render();
         };
 
