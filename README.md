@@ -1,6 +1,6 @@
-# memory.js
+# pairs.js
 
-A memory game using HTML5 and node.js by Thorsten Rinne and Sebastian Springer
+A Pairs game using HTML5 and node.js by Thorsten Rinne and Sebastian Springer
 
 ## License
 
